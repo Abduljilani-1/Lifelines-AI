@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Daily Check-in | LifeLens AI</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #005f7f,
+                    #007c9e,
+                    #006b8f,
+                    #004d6b
+                );
+
+            color: white;
+
+            padding: 30px;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 35px;
+        }
+
+
+        .logo {
+
+            font-size: 28px;
+
+            font-weight: bold;
+        }
+
+
+        .logo span {
+
+            color: #8eeaff;
+        }
+
+
+        .back-btn {
+
+            text-decoration: none;
+
+            color: white;
+
+            padding: 10px 20px;
+
+            border-radius: 25px;
+
+            border: 1px solid
+                rgba(255,255,255,0.4);
+
+            background:
+                rgba(255,255,255,0.12);
+
+            transition: 0.3s;
+        }
+
+
+        .back-btn:hover {
+
+            background:
+                rgba(255,255,255,0.22);
+
+            transform: translateY(-2px);
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+
+            max-width: 1100px;
+
+            margin: auto;
+        }
+
+
+        .page-title {
+
+            text-align: center;
+
+            font-size: 36px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #d7f7ff;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* =========================
+           FORM CARD
+        ========================= */
+
+        .checkin-card {
+
+            background:
+                rgba(0, 65, 95, 0.65);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.30);
+
+            border-radius: 22px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,0.25);
+
+            backdrop-filter: blur(10px);
+
+            margin-bottom: 40px;
+        }
+
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 24px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        .error {
+
+            background:
+                rgba(255,60,60,0.18);
+
+            border:
+                1px solid
+                rgba(255,120,120,0.55);
+
+            color: #ffd6d6;
+
+            padding: 13px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .full {
+
+            grid-column: span 2;
+        }
+
+
+        label {
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+
+            color: #e5faff;
+        }
+
+
+        input,
+        select,
+        textarea {
+
+            width: 100%;
+
+            padding: 13px 15px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.35);
+
+            background:
+                rgba(255,255,255,0.10);
+
+            color: white;
+
+            outline: none;
+
+            font-size: 15px;
+        }
+
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+
+            border-color: #8eeaff;
+
+            box-shadow:
+                0 0 8px
+                rgba(142,234,255,0.35);
+        }
+
+
+        select option {
+
+            background: white;
+
+            color: #004d6b;
+        }
+
+
+        textarea {
+
+            min-height: 110px;
+
+            resize: vertical;
+        }
+
+
+        /* =========================
+           SAVE BUTTON
+        ========================= */
+
+        .save-area {
+
+            text-align: center;
+
+            margin-top: 25px;
+        }
+
+
+        .save-btn {
+
+            border: none;
+
+            padding: 14px 35px;
+
+            border-radius: 30px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #43d9ff,
+                    #008fc0
+                );
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 6px 18px
+                rgba(0,0,0,0.25);
+
+            transition: 0.3s;
+        }
+
+
+        .save-btn:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(0,0,0,0.35);
+        }
+
+
+        /* =========================
+           HISTORY
+        ========================= */
+
+        .history-title {
+
+            text-align: center;
+
+            font-size: 28px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .history-container {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 18px;
+        }
+
+
+        .history-card {
+
+            background:
+                rgba(0,65,95,0.65);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.30);
+
+            border-radius: 18px;
+
+            padding: 22px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0,0,0,0.20);
+
+            backdrop-filter: blur(8px);
+        }
+
+
+        .history-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+
+        .date {
+
+            font-size: 19px;
+
+            font-weight: bold;
+
+            color: #8eeaff;
+        }
+
+
+        .checkin-id {
+
+            font-size: 13px;
+
+            color: #c9edf5;
+        }
+
+
+        .details {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 12px;
+        }
+
+
+        .detail-box {
+
+            background:
+                rgba(255,255,255,0.08);
+
+            border-radius: 12px;
+
+            padding: 14px;
+
+            text-align: center;
+        }
+
+
+        .detail-label {
+
+            color: #c8edf5;
+
+            font-size: 12px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .detail-value {
+
+            font-size: 16px;
+
+            font-weight: bold;
+        }
+
+
+        .note {
+
+            margin-top: 15px;
+
+            background:
+                rgba(255,255,255,0.07);
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            line-height: 1.5;
+
+            color: #e8faff;
+        }
+
+
+        .note strong {
+
+            color: #8eeaff;
+        }
+
+
+        /* =========================
+           ACTION BUTTONS
+        ========================= */
+
+        .actions {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 18px;
+        }
+
+
+        .edit-btn,
+        .delete-btn {
+
+            text-decoration: none;
+
+            padding: 9px 18px;
+
+            border-radius: 20px;
+
+            font-size: 14px;
+        }
+
+
+        .edit-btn {
+
+            color: #9eeeff;
+
+            background:
+                rgba(67,217,255,0.15);
+
+            border:
+                1px solid
+                rgba(67,217,255,0.45);
+        }
+
+
+        .delete-btn {
+
+            color: #ffbaba;
+
+            background:
+                rgba(255,70,70,0.15);
+
+            border:
+                1px solid
+                rgba(255,100,100,0.40);
+        }
+
+
+        /* =========================
+           EMPTY HISTORY
+        ========================= */
+
+        .no-history {
+
+            text-align: center;
+
+            padding: 40px;
+
+            background:
+                rgba(0,65,95,0.55);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.25);
+
+            border-radius: 18px;
+        }
+
+
+        .no-history-icon {
+
+            font-size: 45px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .no-history h3 {
+
+            margin-bottom: 8px;
+        }
+
+
+        .no-history p {
+
+            color: #c9edf5;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            body {
+                padding: 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: span 1;
+            }
+
+            .details {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+
+        @media (max-width: 500px) {
+
+            .details {
+                grid-template-columns: 1fr;
+            }
+
+            .history-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="logo">
+
+            LifeLens <span>AI</span>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back-btn"
+        >
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+
+    <div class="container">
+
+
+        <!-- TITLE -->
+
+        <h1 class="page-title">
+
+            📅 Daily Check-in
+
+        </h1>
+
+
+        <p class="subtitle">
+
+            Keep track of how your day is going
+            and understand your well-being over time.
+
+        </p>
+
+
+
+        <!-- FORM -->
+
+        <div class="checkin-card">
+
+
+            <h2 class="section-title">
+
+                How are you feeling today?
+
+            </h2>
+
+
+            {% if error %}
+
+                <div class="error">
+
+                    ⚠️ {{ error }}
+
+                </div>
+
+            {% endif %}
+
+
+
+            <form
+                method="POST"
+                action="{{ url_for('daily_checkin') }}"
+            >
+
+
+                <div class="form-grid">
+
+
+                    <!-- DATE -->
+
+                    <div class="form-group">
+
+                        <label for="checkin_date">
+
+                            📅 Date
+
+                        </label>
+
+
+                        <input
+                            type="date"
+                            id="checkin_date"
+                            name="checkin_date"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- MOOD -->
+
+                    <div class="form-group">
+
+                        <label for="mood">
+
+                            😊 Mood
+
+                        </label>
+
+
+                        <select
+                            id="mood"
+                            name="mood"
+                            required
+                        >
+
+                            <option value="">
+                                Select your mood
+                            </option>
+
+                            <option value="Happy">
+                                Happy
+                            </option>
+
+                            <option value="Good">
+                                Good
+                            </option>
+
+                            <option value="Neutral">
+                                Neutral
+                            </option>
+
+                            <option value="Sad">
+                                Sad
+                            </option>
+
+                            <option value="Stressed">
+                                Stressed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- STRESS -->
+
+                    <div class="form-group">
+
+                        <label for="stress_level">
+
+                            😰 Stress Level
+
+                        </label>
+
+
+                        <select
+                            id="stress_level"
+                            name="stress_level"
+                            required
+                        >
+
+                            <option value="">
+                                Select stress level
+                            </option>
+
+                            <option value="Low">
+                                Low
+                            </option>
+
+                            <option value="Moderate">
+                                Moderate
+                            </option>
+
+                            <option value="High">
+                                High
+                            </option>
+
+                            <option value="Very High">
+                                Very High
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- ENERGY -->
+
+                    <div class="form-group">
+
+                        <label for="energy_level">
+
+                            ⚡ Energy Level
+
+                        </label>
+
+
+                        <select
+                            id="energy_level"
+                            name="energy_level"
+                            required
+                        >
+
+                            <option value="">
+                                Select energy level
+                            </option>
+
+                            <option value="Very High">
+                                Very High
+                            </option>
+
+                            <option value="High">
+                                High
+                            </option>
+
+                            <option value="Moderate">
+                                Moderate
+                            </option>
+
+                            <option value="Low">
+                                Low
+                            </option>
+
+                            <option value="Very Low">
+                                Very Low
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- SLEEP -->
+
+                    <div class="form-group">
+
+                        <label for="sleep_hours">
+
+                            😴 Sleep Hours
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="sleep_hours"
+                            name="sleep_hours"
+                            min="0"
+                            max="24"
+                            step="0.1"
+                            placeholder="Example: 7.5"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- NOTE -->
+
+                    <div class="form-group full">
+
+                        <label for="note">
+
+                            📝 Notes
+
+                        </label>
+
+
+                        <textarea
+                            id="note"
+                            name="note"
+                            placeholder="Write something about your day..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SAVE -->
+
+                <div class="save-area">
+
+                    <button
+                        type="submit"
+                        class="save-btn"
+                    >
+
+                        💾 Save Daily Check-in
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+<!-- HISTORY -->
+
+<h2 class="history-title">
+
+    📊 Check-in History
+
+</h2>
+
+
+{% if checkins %}
+
+    <div class="history-container">
+
+
+        {% for checkin in checkins %}
+
+            <div class="history-card">
+
+
+                <div class="history-top">
+
+                    <div class="date">
+
+                        📅 {{ checkin['checkin_date'] }}
+
+                    </div>
+
+
+                    <div class="checkin-id">
+
+                        Check-in #{{ checkin['id'] }}
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="details">
+
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+
+                            😊 Mood
+
+                        </div>
+
+                        <div class="detail-value">
+
+                            {{ checkin['mood'] }}
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+
+                            😰 Stress
+
+                        </div>
+
+                        <div class="detail-value">
+
+                            {{ checkin['stress_level'] }}
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+
+                            ⚡ Energy
+
+                        </div>
+
+                        <div class="detail-value">
+
+                            {{ checkin['energy_level'] }}
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+
+                            😴 Sleep
+
+                        </div>
+
+                        <div class="detail-value">
+
+                            {{ checkin['sleep_hours'] }} hours
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                {% if checkin['note'] %}
+
+                    <div class="note">
+
+                        <strong>📝 Note:</strong>
+
+                        {{ checkin['note'] }}
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- EDIT & DELETE -->
+
+                <div class="actions">
+
+
+                    <a
+                        href="{{ url_for(
+                            'edit_daily_checkin',
+                            id=checkin['id']
+                        ) }}"
+                        class="edit-btn"
+                    >
+
+                        ✏️ Edit
+
+                    </a>
+
+
+                    <a
+                        href="{{ url_for(
+                            'delete_daily_checkin',
+                            id=checkin['id']
+                        ) }}"
+                        class="delete-btn"
+                        onclick="return confirm(
+                            'Are you sure you want to delete this check-in?'
+                        );"
+                    >
+
+                        🗑️ Delete
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+
+{% else %}
+
+
+    <div class="no-history">
+
+        <div class="no-history-icon">
+
+            📅
+
+        </div>
+
+
+        <h3>
+
+            No check-ins yet
+
+        </h3>
+
+
+        <p>
+
+            Save your first daily check-in
+            and it will appear here.
+
+        </p>
+
+    </div>
+
+
+{% endif %}
+
+        
+
+
+            
+
+
+    </div>
+
+
+
+    <!-- SET TODAY'S DATE -->
+
+    <script>
+
+        const dateInput =
+            document.getElementById("checkin_date");
+
+        if (dateInput) {
+
+            const today =
+                new Date()
+                    .toISOString()
+                    .split("T")[0];
+
+            dateInput.value = today;
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

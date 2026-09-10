@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Money Track - LifeLens AI</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0e0844 0%, #0f4c5c 45%, #271473 100%);
+            color: white;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+        }
+
+        .header p {
+            color: #d8eaff;
+            margin-top: 5px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.25);
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* ERROR */
+        .error-box {
+            background: rgba(255, 80, 80, 0.18);
+            border: 1px solid rgba(255, 100, 100, 0.5);
+            color: #ffd0d0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        /* SUMMARY CARDS */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 22px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .summary-card h3 {
+            font-size: 15px;
+            color: #d7eaff;
+            margin-bottom: 10px;
+        }
+
+        .summary-card .amount {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .income {
+            color: #6cff9a;
+        }
+
+        .expense {
+            color: #ff8585;
+        }
+
+        .balance {
+            color: #70d7ff;
+        }
+
+        /* MAIN GRID */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 18px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        /* FORM */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #e1efff;
+            font-size: 14px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 9px;
+            background: rgba(255,255,255,0.95);
+            color: #222;
+            outline: none;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            box-shadow: 0 0 0 2px #70d7ff;
+        }
+
+        .add-btn {
+            width: 100%;
+            border: none;
+            padding: 13px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #00b4db, #0083b0);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+
+        /* MONTHLY SECTION */
+        .monthly-box {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.18);
+        }
+
+        .monthly-box h3 {
+            margin-bottom: 15px;
+        }
+
+        .monthly-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 9px 0;
+            color: #e4f1ff;
+        }
+
+        /* CATEGORY */
+        .category-section {
+            margin-top: 25px;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .category-item:last-child {
+            border-bottom: none;
+        }
+
+        /* TABLE */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th {
+            text-align: left;
+            padding: 13px;
+            background: rgba(255,255,255,0.12);
+            color: #dff2ff;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            color: #f5faff;
+            font-size: 14px;
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .type-income {
+            color: #6cff9a;
+            font-weight: bold;
+        }
+
+        .type-expense {
+            color: #ff8585;
+            font-weight: bold;
+        }
+
+        .amount-income {
+            color: #6cff9a;
+            font-weight: bold;
+        }
+
+        .amount-expense {
+            color: #ff8585;
+            font-weight: bold;
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            text-decoration: none;
+            padding: 7px 11px;
+            border-radius: 7px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .edit-btn {
+            background: rgba(0, 180, 219, 0.25);
+            color: #8ee7ff;
+            border: 1px solid rgba(0,180,219,0.4);
+        }
+
+        .delete-btn {
+            background: rgba(255, 80, 80, 0.20);
+            color: #ffb0b0;
+            border: 1px solid rgba(255,80,80,0.35);
+        }
+
+        .edit-btn:hover,
+        .delete-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* EMPTY */
+        .empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: #c9dded;
+        }
+
+        .empty-icon {
+            font-size: 45px;
+            margin-bottom: 12px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 950px) {
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div>
+            <h1>💰 Money Track</h1>
+            <p>Track your income, expenses and financial balance.</p>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="back-btn">
+            ← Dashboard
+        </a>
+    </div>
+
+
+    <!-- ERROR MESSAGE -->
+    {% if error %}
+    <div class="error-box">
+        ⚠️ {{ error }}
+    </div>
+    {% endif %}
+
+
+    <!-- SUMMARY -->
+    <div class="summary-grid">
+
+        <div class="summary-card">
+            <h3>Total Income</h3>
+            <div class="amount income">
+                ₹{{ "%.2f"|format(total_income|float) }}
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <h3>Total Expense</h3>
+            <div class="amount expense">
+                ₹{{ "%.2f"|format(total_expense|float) }}
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <h3>Total Balance</h3>
+            <div class="amount balance">
+                ₹{{ "%.2f"|format(balance|float) }}
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <h3>This Month Balance</h3>
+            <div class="amount balance">
+                ₹{{ "%.2f"|format(monthly_balance|float) }}
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+    <div class="main-grid">
+
+        <!-- LEFT SIDE -->
+        <div>
+
+            <!-- ADD MONEY -->
+            <div class="card">
+
+                <h2>➕ Add Transaction</h2>
+
+                <form action="{{ url_for('add_money') }}" method="POST">
+
+                    <div class="form-group">
+                        <label>Transaction Type</label>
+
+                        <select name="transaction_type" required>
+                            <option value="">Select Type</option>
+                            <option value="Income">Income</option>
+                            <option value="Expense">Expense</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Category</label>
+
+                        <select name="category" required>
+                            <option value="">Select Category</option>
+
+                            <option value="Salary">Salary</option>
+                            <option value="Freelance">Freelance</option>
+                            <option value="Business">Business</option>
+                            <option value="Food">Food</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Bills">Bills</option>
+                            <option value="Education">Education</option>
+                            <option value="Health">Health</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Rent">Rent</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Amount (₹)</label>
+
+                        <input
+                            type="number"
+                            name="amount"
+                            step="0.01"
+                            min="0.01"
+                            placeholder="Enter amount"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Description</label>
+
+                        <textarea
+                            name="description"
+                            placeholder="Enter description (optional)"
+                        ></textarea>
+                    </div>
+
+
+                    <button type="submit" class="add-btn">
+                        💾 Save Transaction
+                    </button>
+
+                </form>
+
+
+                <!-- MONTHLY SUMMARY -->
+                <div class="monthly-box">
+
+                    <h3>📅 This Month</h3>
+
+                    <div class="monthly-row">
+                        <span>Income</span>
+                        <strong class="income">
+                            ₹{{ "%.2f"|format(monthly_income|float) }}
+                        </strong>
+                    </div>
+
+                    <div class="monthly-row">
+                        <span>Expenses</span>
+                        <strong class="expense">
+                            ₹{{ "%.2f"|format(monthly_expense|float) }}
+                        </strong>
+                    </div>
+
+                    <div class="monthly-row">
+                        <span>Balance</span>
+                        <strong class="balance">
+                            ₹{{ "%.2f"|format(monthly_balance|float) }}
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <!-- CATEGORY EXPENSES -->
+                <div class="category-section">
+
+                    <h3>📊 Expense by Category</h3>
+
+                    {% if category_expenses %}
+
+                        {% for category in category_expenses %}
+
+                        <div class="category-item">
+
+                            <span>
+                                {{ category['category'] }}
+                            </span>
+
+                            <strong class="expense">
+                                ₹{{ "%.2f"|format(category['total']|float) }}
+                            </strong>
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p style="color:#c9dded; margin-top:12px;">
+                            No expense data yet.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <div class="card">
+
+            <h2>📋 Transaction History</h2>
+
+            {% if transactions %}
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for transaction in transactions %}
+
+                        <tr>
+
+                            <td>
+                                {% if transaction['transaction_date'] %}
+                                    {{ transaction['transaction_date'].strftime('%d-%m-%Y %H:%M') }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+
+
+                            <td>
+
+                                {% if transaction['transaction_type'] == 'Income' %}
+
+                                    <span class="type-income">
+                                        ↑ Income
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="type-expense">
+                                        ↓ Expense
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+                                {{ transaction['category'] }}
+                            </td>
+
+
+                            <td>
+
+                                {% if transaction['transaction_type'] == 'Income' %}
+
+                                    <span class="amount-income">
+                                        +₹{{ "%.2f"|format(transaction['amount']|float) }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="amount-expense">
+                                        -₹{{ "%.2f"|format(transaction['amount']|float) }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+                                {{ transaction['description'] or '-' }}
+                            </td>
+
+
+                            <td>
+
+                                {% if transaction.get('id') %}
+
+                                <div class="action-buttons">
+
+                                    <a
+                                        href="{{ url_for('edit_money', transaction_id=transaction['id']) }}"
+                                        class="edit-btn"
+                                    >
+                                        ✏️ Edit
+                                    </a>
+
+                                    <a
+                                        href="{{ url_for('delete_money', transaction_id=transaction['id']) }}"
+                                        class="delete-btn"
+                                        onclick="return confirm('Are you sure you want to delete this transaction?');"
+                                    >
+                                        🗑️ Delete
+                                    </a>
+
+                                </div>
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        💸
+                    </div>
+
+                    <h3>No Transactions Yet</h3>
+
+                    <p style="margin-top:8px;">
+                        Add your first income or expense to start tracking your money.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

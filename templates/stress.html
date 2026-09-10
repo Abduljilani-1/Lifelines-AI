@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Stress Tracker - LifeLens AI</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* =========================================
+           DASHBOARD BACKGROUND - DO NOT CHANGE
+        ========================================= */
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: white;
+
+            background:
+                radial-gradient(
+                    ellipse at 50% -10%,
+                    rgba(80, 230, 255, 0.5),
+                    transparent 40%
+                ),
+                linear-gradient(
+                    180deg,
+                    #021a45 0%,
+                    #023d6b 30%,
+                    #00647d 65%,
+                    #012f48 100%
+                );
+
+            padding: 30px;
+        }
+
+        /* =========================================
+           MAIN CONTAINER
+        ========================================= */
+
+        .container {
+            position: relative;
+
+            width: 90%;
+
+            max-width: 1180px;
+
+            margin: 0 auto;
+        }
+
+        /* =========================================
+           TOP BAR
+        ========================================= */
+
+        .top-bar {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 35px;
+        }
+
+        .title-area h1 {
+            font-size: 38px;
+
+            margin-bottom: 8px;
+
+            text-shadow:
+                0 4px 12px
+                rgba(0, 0, 0, 0.45);
+        }
+
+        .subtitle {
+            font-size: 17px;
+
+            color:
+                rgba(255, 255, 255, 0.9);
+        }
+
+        /* =========================================
+           DASHBOARD BUTTON
+        ========================================= */
+
+        .back-btn {
+            text-decoration: none;
+
+            color: white;
+
+            padding: 11px 23px;
+
+            border-radius: 30px;
+
+            border:
+                1px solid
+                rgba(150, 245, 255, 0.7);
+
+            background:
+                rgba(0, 70, 110, 0.35);
+
+            backdrop-filter: blur(8px);
+
+            transition: 0.3s ease;
+
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+
+            background:
+                rgba(30, 130, 170, 0.45);
+        }
+
+        /* =========================================
+           COMMON GLASS CARD STYLE
+           SAME STYLE FOR ALL OPTIONS
+        ========================================= */
+
+        .card {
+
+            position: relative;
+
+            padding: 28px;
+
+            margin-bottom: 25px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(35, 190, 235, 0.22),
+                    rgba(0, 55, 110, 0.48)
+                );
+
+            backdrop-filter: blur(8px);
+
+            -webkit-backdrop-filter: blur(8px);
+
+            border:
+                1px solid
+                rgba(165, 245, 255, 0.72);
+
+            box-shadow:
+                0 14px 28px
+                rgba(0, 15, 40, 0.42),
+
+                inset 0 0 14px
+                rgba(100, 220, 255, 0.06);
+        }
+
+        .card h2 {
+            font-size: 23px;
+
+            margin-bottom: 22px;
+
+            color: white;
+        }
+
+        /* =========================================
+           STRESS OPTIONS
+        ========================================= */
+
+        .stress-options {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 22px;
+        }
+
+        .stress-option {
+            position: relative;
+        }
+
+        .stress-option input {
+            display: none;
+        }
+
+        /* ALL OPTION BOXES SAME COLOUR */
+
+        .stress-option label {
+
+            display: block;
+
+            width: 100%;
+
+            padding: 22px 10px;
+
+            text-align: center;
+
+            border-radius: 16px;
+
+            cursor: pointer;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(35, 190, 235, 0.22),
+                    rgba(0, 55, 110, 0.48)
+                );
+
+            border:
+                1px solid
+                rgba(165, 245, 255, 0.72);
+
+            box-shadow:
+                inset 0 0 14px
+                rgba(100, 220, 255, 0.05),
+
+                0 8px 18px
+                rgba(0, 15, 40, 0.25);
+
+            backdrop-filter: blur(8px);
+
+            transition:
+                0.3s ease;
+        }
+
+        .stress-option label:hover {
+
+            transform:
+                translateY(-5px);
+
+            border-color:
+                rgba(100, 240, 255, 0.95);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(35, 205, 245, 0.29),
+                    rgba(0, 65, 125, 0.52)
+                );
+
+            box-shadow:
+                0 12px 25px
+                rgba(0, 15, 40, 0.4);
+        }
+
+        /* SELECTED OPTION */
+
+        .stress-option input:checked + label {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(35, 205, 245, 0.38),
+                    rgba(0, 75, 135, 0.62)
+                );
+
+            border-color:
+                #48eaff;
+
+            box-shadow:
+                0 0 20px
+                rgba(72, 234, 255, 0.28),
+
+                inset 0 0 18px
+                rgba(100, 230, 255, 0.08);
+
+            transform:
+                translateY(-3px);
+        }
+
+        /* =========================================
+           TEXTAREA
+        ========================================= */
+
+        textarea {
+
+            width: 100%;
+
+            min-height: 110px;
+
+            resize: vertical;
+
+            padding: 15px;
+
+            border-radius: 14px;
+
+            border:
+                1px solid
+                rgba(165, 245, 255, 0.65);
+
+            background:
+                rgba(0, 45, 80, 0.42);
+
+            backdrop-filter: blur(8px);
+
+            color: white;
+
+            font-size: 15px;
+
+            font-family: Arial, sans-serif;
+
+            margin-bottom: 18px;
+        }
+
+        textarea::placeholder {
+            color:
+                rgba(255, 255, 255, 0.65);
+        }
+
+        textarea:focus {
+
+            outline: none;
+
+            border-color:
+                #48eaff;
+
+            box-shadow:
+                0 0 15px
+                rgba(72, 234, 255, 0.2);
+        }
+
+        /* =========================================
+           SAVE BUTTON
+        ========================================= */
+
+        .save-btn {
+
+            width: 100%;
+
+            border: none;
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(35, 190, 235, 0.55),
+                    rgba(0, 75, 125, 0.75)
+                );
+
+            border:
+                1px solid
+                rgba(165, 245, 255, 0.65);
+
+            transition:
+                0.3s ease;
+        }
+
+        .save-btn:hover {
+
+            transform:
+                translateY(-3px);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(35, 210, 245, 0.65),
+                    rgba(0, 90, 145, 0.8)
+                );
+
+            box-shadow:
+                0 10px 25px
+                rgba(0, 20, 50, 0.4);
+        }
+
+        /* =========================================
+           ERROR
+        ========================================= */
+
+        .error {
+
+            padding: 13px 16px;
+
+            margin-bottom: 20px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(190, 35, 50, 0.35);
+
+            border:
+                1px solid
+                rgba(255, 150, 160, 0.5);
+
+            color: white;
+        }
+
+        /* =========================================
+           HISTORY TITLE
+        ========================================= */
+
+        .history-title {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+        .history-title h2 {
+            margin-bottom: 0;
+        }
+
+        /* =========================================
+           RECORD BOX
+           SAME STYLE AS OPTIONS
+        ========================================= */
+
+        .record {
+
+            padding: 20px;
+
+            margin-bottom: 16px;
+
+            border-radius: 16px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(35, 190, 235, 0.22),
+                    rgba(0, 55, 110, 0.48)
+                );
+
+            backdrop-filter: blur(8px);
+
+            border:
+                1px solid
+                rgba(165, 245, 255, 0.65);
+
+            box-shadow:
+                0 8px 18px
+                rgba(0, 15, 40, 0.25);
+
+            transition:
+                0.3s ease;
+        }
+
+        .record:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(0, 15, 40, 0.35);
+        }
+
+        .record-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 14px;
+        }
+
+        /* =========================================
+           STRESS BADGES
+        ========================================= */
+
+        .stress-badge {
+
+            display: inline-block;
+
+            padding: 8px 15px;
+
+            border-radius: 20px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.25);
+        }
+
+        .low {
+
+            background:
+                rgba(50, 200, 120, 0.25);
+
+            color:
+                #9affc8;
+        }
+
+        .moderate {
+
+            background:
+                rgba(240, 190, 40, 0.25);
+
+            color:
+                #ffe58a;
+        }
+
+        .high {
+
+            background:
+                rgba(255, 130, 40, 0.25);
+
+            color:
+                #ffc080;
+        }
+
+        .very-high {
+
+            background:
+                rgba(230, 50, 70, 0.28);
+
+            color:
+                #ffabb5;
+        }
+
+        /* =========================================
+           DATE
+        ========================================= */
+
+        .date {
+
+            color:
+                rgba(255, 255, 255, 0.7);
+
+            font-size: 14px;
+        }
+
+        /* =========================================
+           NOTE
+        ========================================= */
+
+        .note {
+
+            margin: 10px 0 16px;
+
+            line-height: 1.6;
+
+            color:
+                rgba(255, 255, 255, 0.9);
+        }
+
+        /* =========================================
+           EDIT + DELETE
+        ========================================= */
+
+        .actions {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 10px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+
+            display: inline-block;
+
+            text-decoration: none;
+
+            padding: 9px 17px;
+
+            border-radius: 9px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            transition:
+                0.3s ease;
+        }
+
+        /* EDIT */
+
+        .edit-btn {
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(35, 190, 235, 0.55),
+                    rgba(0, 75, 125, 0.75)
+                );
+
+            border:
+                1px solid
+                rgba(165, 245, 255, 0.65);
+        }
+
+        .edit-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(35, 210, 245, 0.65),
+                    rgba(0, 90, 145, 0.8)
+                );
+        }
+
+        /* DELETE */
+
+        .delete-btn {
+
+            color: white;
+
+            background:
+                rgba(210, 45, 60, 0.8);
+
+            border:
+                1px solid
+                rgba(255, 150, 160, 0.5);
+        }
+
+        .delete-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            background:
+                rgba(235, 45, 60, 0.95);
+        }
+
+        /* =========================================
+           EMPTY
+        ========================================= */
+
+        .empty {
+
+            text-align: center;
+
+            padding: 35px;
+
+            color:
+                rgba(255, 255, 255, 0.75);
+        }
+
+        .empty p {
+            margin-bottom: 8px;
+        }
+
+        /* =========================================
+           TABLET
+        ========================================= */
+
+        @media (max-width: 900px) {
+
+            .stress-options {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .top-bar {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 18px;
+            }
+
+        }
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 18px;
+            }
+
+            .container {
+                width: 100%;
+            }
+
+            .title-area h1 {
+                font-size: 29px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .stress-options {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+            .record-top {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .actions {
+
+                width: 100%;
+            }
+
+            .edit-btn,
+            .delete-btn {
+
+                flex: 1;
+
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =========================================
+         TOP BAR
+    ========================================= -->
+
+    <div class="top-bar">
+
+        <div class="title-area">
+
+            <h1>
+                🧘 Stress Tracker
+            </h1>
+
+            <p class="subtitle">
+                Monitor your stress levels throughout your day.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back-btn"
+        >
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- =========================================
+         ERROR
+    ========================================= -->
+
+    {% if error %}
+
+        <div class="error">
+
+            ⚠️ {{ error }}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =========================================
+         ADD STRESS
+    ========================================= -->
+
+    <div class="card">
+
+        <h2>
+            How are you feeling?
+        </h2>
+
+
+        <form
+            method="POST"
+            action="{{ url_for('stress') }}"
+        >
+
+
+            <div class="stress-options">
+
+
+                <!-- LOW -->
+
+                <div class="stress-option">
+
+                    <input
+                        type="radio"
+                        id="low"
+                        name="stress_level"
+                        value="Low"
+                        required
+                    >
+
+                    <label for="low">
+
+                        😌
+                        <br>
+                        Low
+
+                    </label>
+
+                </div>
+
+
+                <!-- MODERATE -->
+
+                <div class="stress-option">
+
+                    <input
+                        type="radio"
+                        id="moderate"
+                        name="stress_level"
+                        value="Moderate"
+                    >
+
+                    <label for="moderate">
+
+                        😐
+                        <br>
+                        Moderate
+
+                    </label>
+
+                </div>
+
+
+                <!-- HIGH -->
+
+                <div class="stress-option">
+
+                    <input
+                        type="radio"
+                        id="high"
+                        name="stress_level"
+                        value="High"
+                    >
+
+                    <label for="high">
+
+                        😟
+                        <br>
+                        High
+
+                    </label>
+
+                </div>
+
+
+                <!-- VERY HIGH -->
+
+                <div class="stress-option">
+
+                    <input
+                        type="radio"
+                        id="very-high"
+                        name="stress_level"
+                        value="Very High"
+                    >
+
+                    <label for="very-high">
+
+                        😰
+                        <br>
+                        Very High
+
+                    </label>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- NOTE -->
+
+            <textarea
+                name="note"
+                placeholder="Add a note about what is causing your stress (optional)..."
+            ></textarea>
+
+
+            <!-- SAVE -->
+
+            <button
+                type="submit"
+                class="save-btn"
+            >
+                Save Stress Level
+            </button>
+
+
+        </form>
+
+    </div>
+
+
+    <!-- =========================================
+         STRESS HISTORY
+    ========================================= -->
+
+    <div class="card">
+
+
+        <div class="history-title">
+
+            <h2>
+                📊 Stress History
+            </h2>
+
+        </div>
+
+
+        {% if stress_records %}
+
+
+            {% for record in stress_records %}
+
+
+                <div class="record">
+
+
+                    <div class="record-top">
+
+
+                        <!-- STRESS LEVEL -->
+
+                        {% if record.stress_level == "Low" %}
+
+                            <span class="stress-badge low">
+                                😌 Low
+                            </span>
+
+                        {% elif record.stress_level == "Moderate" %}
+
+                            <span class="stress-badge moderate">
+                                😐 Moderate
+                            </span>
+
+                        {% elif record.stress_level == "High" %}
+
+                            <span class="stress-badge high">
+                                😟 High
+                            </span>
+
+                        {% elif record.stress_level == "Very High" %}
+
+                            <span class="stress-badge very-high">
+                                😰 Very High
+                            </span>
+
+                        {% else %}
+
+                            <span class="stress-badge">
+                                {{ record.stress_level }}
+                            </span>
+
+                        {% endif %}
+
+
+                        <!-- DATE -->
+
+                        <span class="date">
+
+                            {% if record.created_at %}
+
+                                {{ record.created_at }}
+
+                            {% endif %}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <!-- NOTE -->
+
+                    {% if record.note %}
+
+                        <div class="note">
+
+                            <strong>
+                                Note:
+                            </strong>
+
+                            {{ record.note }}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="note">
+
+                            No note added.
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- =================================
+                         EDIT + DELETE
+                    ================================= -->
+
+                    <div class="actions">
+
+
+                        <a
+                            href="{{ url_for('edit_stress', id=record.id) }}"
+                            class="edit-btn"
+                        >
+                            ✏️ Edit
+                        </a>
+
+
+                        <a
+                            href="{{ url_for('delete_stress', id=record.id) }}"
+                            class="delete-btn"
+                            onclick="return confirm('Are you sure you want to delete this stress record?');"
+                        >
+                            🗑️ Delete
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <div class="empty">
+
+                <p>
+                    📭 No stress records yet.
+                </p>
+
+                <p>
+                    Add your first stress level above.
+                </p>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

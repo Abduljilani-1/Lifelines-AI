@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>LifeLens AI - My Notes</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: white;
+
+            padding: 30px;
+
+            background:
+
+                radial-gradient(
+                    ellipse at 50% -10%,
+                    rgba(80, 230, 255, 0.5),
+                    transparent 40%
+                ),
+
+                linear-gradient(
+                    180deg,
+                    #021a45 0%,
+                    #023d6b 30%,
+                    #00647d 65%,
+                    #012f48 100%
+                );
+        }
+
+
+        /* ===============================
+           MAIN CONTAINER
+        =============================== */
+
+        .container {
+
+            width: 90%;
+
+            max-width: 1100px;
+
+            margin: auto;
+        }
+
+
+        /* ===============================
+           HEADER
+        =============================== */
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 30px;
+
+            gap: 20px;
+        }
+
+
+        .header h1 {
+
+            font-size: 38px;
+
+            text-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.4);
+        }
+
+
+        .back-btn {
+
+            text-decoration: none;
+
+            color: white;
+
+            padding:
+                12px 22px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(0,90,130,0.55);
+
+            border:
+                1px solid
+                rgba(170,245,255,0.7);
+
+            transition:
+                0.3s ease;
+        }
+
+
+        .back-btn:hover {
+
+            transform:
+                translateY(-3px);
+
+            background:
+                rgba(0,150,190,0.6);
+        }
+
+
+        /* ===============================
+           ADD NOTE BOX
+        =============================== */
+
+        .add-note {
+
+            padding: 25px;
+
+            margin-bottom: 30px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(0,55,100,0.48);
+
+            border:
+                1px solid
+                rgba(170,245,255,0.6);
+
+            backdrop-filter:
+                blur(10px);
+
+            -webkit-backdrop-filter:
+                blur(10px);
+
+            box-shadow:
+                0 15px 30px
+                rgba(0,20,50,0.35);
+        }
+
+
+        .add-note h2 {
+
+            margin-bottom: 20px;
+
+            font-size: 24px;
+        }
+
+
+        input,
+        textarea {
+
+            width: 100%;
+
+            border: none;
+
+            outline: none;
+
+            border-radius: 12px;
+
+            padding: 14px;
+
+            margin-bottom: 15px;
+
+            font-size: 16px;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
+
+
+        input {
+
+            height: 50px;
+        }
+
+
+        textarea {
+
+            min-height: 140px;
+
+            resize: vertical;
+        }
+
+
+        .add-btn {
+
+            border: none;
+
+            cursor: pointer;
+
+            color: white;
+
+            padding:
+                12px 25px;
+
+            border-radius: 25px;
+
+            font-size: 16px;
+
+            background:
+                rgba(0,155,205,0.8);
+
+            transition:
+                0.3s ease;
+        }
+
+
+        .add-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            background:
+                rgba(0,190,230,0.9);
+        }
+
+
+        /* ===============================
+           ERROR
+        =============================== */
+
+        .error {
+
+            padding: 14px;
+
+            margin-bottom: 20px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(200,50,60,0.6);
+
+            border:
+                1px solid
+                rgba(255,150,150,0.5);
+        }
+
+
+        /* ===============================
+           NOTES GRID
+        =============================== */
+
+        .notes-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+
+        /* ===============================
+           NOTE CARD
+        =============================== */
+
+        .note-card {
+
+            padding: 22px;
+
+            min-height: 220px;
+
+            border-radius: 18px;
+
+            background:
+                rgba(0,55,100,0.48);
+
+            border:
+                1px solid
+                rgba(170,245,255,0.55);
+
+            backdrop-filter:
+                blur(10px);
+
+            -webkit-backdrop-filter:
+                blur(10px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(0,20,50,0.3);
+
+            transition:
+                0.3s ease;
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .note-card:hover {
+
+            transform:
+                translateY(-6px);
+
+            background:
+                rgba(0,80,120,0.55);
+        }
+
+
+        .note-title {
+
+            font-size: 21px;
+
+            margin-bottom: 12px;
+
+            word-break: break-word;
+        }
+
+
+        .note-content {
+
+            font-size: 15px;
+
+            line-height: 1.6;
+
+            color:
+                rgba(255,255,255,0.92);
+
+            white-space: pre-wrap;
+
+            word-break: break-word;
+
+            flex: 1;
+
+            margin-bottom: 15px;
+        }
+
+
+        .note-date {
+
+            font-size: 12px;
+
+            opacity: 0.7;
+
+            margin-bottom: 15px;
+        }
+
+
+        /* ===============================
+           ACTION BUTTONS
+        =============================== */
+
+        .actions {
+
+            display: flex;
+
+            gap: 10px;
+        }
+
+
+        .edit-btn,
+        .delete-btn {
+
+            text-decoration: none;
+
+            color: white;
+
+            padding:
+                8px 15px;
+
+            border-radius: 20px;
+
+            font-size: 14px;
+
+            transition:
+                0.3s ease;
+        }
+
+
+        .edit-btn {
+
+            background:
+                rgba(0,155,205,0.75);
+        }
+
+
+        .delete-btn {
+
+            background:
+                rgba(190,55,65,0.75);
+        }
+
+
+        .edit-btn:hover {
+
+            background:
+                rgba(0,190,230,0.9);
+        }
+
+
+        .delete-btn:hover {
+
+            background:
+                rgba(230,70,80,0.9);
+        }
+
+
+        /* ===============================
+           NO NOTES
+        =============================== */
+
+        .no-notes {
+
+            text-align: center;
+
+            padding: 50px 20px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(0,55,100,0.45);
+
+            border:
+                1px solid
+                rgba(170,245,255,0.5);
+        }
+
+
+        .no-notes h2 {
+
+            font-size: 25px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .no-notes p {
+
+            opacity: 0.85;
+        }
+
+
+        /* ===============================
+           MOBILE
+        =============================== */
+
+        @media (max-width: 900px) {
+
+            .notes-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            body {
+
+                padding: 20px 12px;
+            }
+
+
+            .container {
+
+                width: 100%;
+            }
+
+
+            .header {
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+                text-align: center;
+            }
+
+
+            .header h1 {
+
+                font-size: 30px;
+            }
+
+
+            .back-btn {
+
+                text-align: center;
+            }
+
+
+            .notes-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .add-note {
+
+                padding: 20px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- ===============================
+         HEADER
+    =============================== -->
+
+    <div class="header">
+
+        <h1>
+            📝 My Notes
+        </h1>
+
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back-btn"
+        >
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- ===============================
+         ERROR MESSAGE
+    =============================== -->
+
+    {% if error %}
+
+        <div class="error">
+
+            ⚠️ {{ error }}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- ===============================
+         ADD NOTE
+    =============================== -->
+
+    <div class="add-note">
+
+        <h2>
+            ✨ Create a New Note
+        </h2>
+
+
+        <form
+            method="POST"
+            action="{{ url_for('add_note') }}"
+        >
+
+            <input
+                type="text"
+                name="title"
+                placeholder="Enter note title"
+                maxlength="150"
+                required
+            >
+
+
+            <textarea
+                name="content"
+                placeholder="Write your note here..."
+                required
+            ></textarea>
+
+
+            <button
+                type="submit"
+                class="add-btn"
+            >
+                ➕ Add Note
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ===============================
+         NOTES
+    =============================== -->
+
+    {% if notes %}
+
+        <div class="notes-grid">
+
+            {% for note in notes %}
+
+                <div class="note-card">
+
+
+                    <h2 class="note-title">
+
+                        📝 {{ note.title }}
+
+                    </h2>
+
+
+                    <div class="note-content">
+
+                        {{ note.content }}
+
+                    </div>
+
+
+                    {% if note.updated_at %}
+
+                        <div class="note-date">
+
+                            Last updated:
+                            {{ note.updated_at }}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="actions">
+
+
+                        <a
+                            href="{{ url_for('edit_note', id=note.id) }}"
+                            class="edit-btn"
+                        >
+                            ✏️ Edit
+                        </a>
+
+
+                        <a
+                            href="{{ url_for('delete_note', id=note.id) }}"
+                            class="delete-btn"
+                            onclick="return confirm('Are you sure you want to delete this note?');"
+                        >
+                            🗑️ Delete
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="no-notes">
+
+            <h2>
+                📭 No Notes Yet
+            </h2>
+
+            <p>
+                Create your first note using the box above.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LifeLens AI</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        /* ==========================================
+           OCEAN BACKGROUND
+        ========================================== */
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: white;
+
+            overflow: hidden;
+
+            background:
+
+                radial-gradient(
+                    ellipse at 50% -10%,
+                    rgba(80, 230, 255, 0.5),
+                    transparent 40%
+                ),
+
+                linear-gradient(
+                    180deg,
+                    #021a45 0%,
+                    #023d6b 30%,
+                    #00647d 65%,
+                    #012f48 100%
+                );
+        }
+
+
+        /* ==========================================
+           OCEAN LIGHT
+        ========================================== */
+
+        .ocean-light {
+
+            position: fixed;
+
+            top: -20%;
+
+            left: 5%;
+
+            width: 90%;
+
+            height: 120%;
+
+            pointer-events: none;
+
+            z-index: 0;
+
+            background:
+
+                linear-gradient(
+                    110deg,
+                    transparent 20%,
+                    rgba(120,245,255,0.17) 35%,
+                    transparent 48%
+                ),
+
+                linear-gradient(
+                    70deg,
+                    transparent 30%,
+                    rgba(100,230,255,0.14) 45%,
+                    transparent 58%
+                );
+
+            filter: blur(8px);
+
+            animation:
+                waterLight
+                10s
+                ease-in-out
+                infinite
+                alternate;
+        }
+
+
+        @keyframes waterLight {
+
+            from {
+                transform:
+                    translateX(-25px);
+            }
+
+            to {
+                transform:
+                    translateX(30px);
+            }
+        }
+
+
+        /* ==========================================
+           BUBBLES
+        ========================================== */
+
+        .bubbles {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 2;
+
+            pointer-events: none;
+        }
+
+
+        .bubble {
+
+            position: absolute;
+
+            bottom: -40px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid
+                rgba(220,250,255,0.65);
+
+            background:
+
+                radial-gradient(
+                    circle at 30% 25%,
+                    rgba(255,255,255,0.65),
+                    rgba(120,220,255,0.08) 55%,
+                    transparent 70%
+                );
+
+            animation:
+                bubbleRise
+                linear
+                infinite;
+        }
+
+
+        .bubble:nth-child(1) {
+            width: 8px;
+            height: 8px;
+            left: 5%;
+            animation-duration: 11s;
+        }
+
+
+        .bubble:nth-child(2) {
+            width: 14px;
+            height: 14px;
+            left: 15%;
+            animation-duration: 15s;
+            animation-delay: 2s;
+        }
+
+
+        .bubble:nth-child(3) {
+            width: 6px;
+            height: 6px;
+            left: 28%;
+            animation-duration: 9s;
+            animation-delay: 4s;
+        }
+
+
+        .bubble:nth-child(4) {
+            width: 11px;
+            height: 11px;
+            left: 40%;
+            animation-duration: 13s;
+            animation-delay: 1s;
+        }
+
+
+        .bubble:nth-child(5) {
+            width: 18px;
+            height: 18px;
+            left: 53%;
+            animation-duration: 17s;
+            animation-delay: 5s;
+        }
+
+
+        .bubble:nth-child(6) {
+            width: 7px;
+            height: 7px;
+            left: 68%;
+            animation-duration: 11s;
+            animation-delay: 3s;
+        }
+
+
+        .bubble:nth-child(7) {
+            width: 13px;
+            height: 13px;
+            left: 80%;
+            animation-duration: 14s;
+            animation-delay: 7s;
+        }
+
+
+        .bubble:nth-child(8) {
+            width: 8px;
+            height: 8px;
+            left: 93%;
+            animation-duration: 12s;
+            animation-delay: 2s;
+        }
+
+
+        @keyframes bubbleRise {
+
+            0% {
+
+                transform:
+                    translateY(0)
+                    translateX(0);
+
+                opacity: 0;
+            }
+
+
+            15% {
+                opacity: 0.8;
+            }
+
+
+            50% {
+
+                transform:
+                    translateY(-50vh)
+                    translateX(25px);
+            }
+
+
+            100% {
+
+                transform:
+                    translateY(-115vh)
+                    translateX(-25px);
+
+                opacity: 0;
+            }
+        }
+
+
+        /* ==========================================
+           FISH
+        ========================================== */
+
+        .fish {
+
+            position: fixed;
+
+            right: -180px;
+
+            z-index: 4;
+
+            pointer-events: none;
+
+            line-height: 1;
+
+            animation:
+                swim
+                linear
+                infinite;
+        }
+
+
+        .fish span {
+
+            display: inline-block;
+
+            animation:
+                fishBody
+                0.65s
+                ease-in-out
+                infinite
+                alternate;
+        }
+
+
+        .fish-1 {
+
+            top: 25%;
+
+            font-size: 55px;
+
+            animation-duration: 18s;
+        }
+
+
+        .fish-2 {
+
+            top: 42%;
+
+            font-size: 40px;
+
+            animation-duration: 23s;
+
+            animation-delay: 4s;
+        }
+
+
+        .fish-3 {
+
+            top: 58%;
+
+            font-size: 47px;
+
+            animation-duration: 20s;
+
+            animation-delay: 7s;
+        }
+
+
+        .fish-4 {
+
+            top: 72%;
+
+            font-size: 34px;
+
+            animation-duration: 27s;
+
+            animation-delay: 11s;
+        }
+
+
+        @keyframes swim {
+
+            0% {
+
+                right: -180px;
+
+                transform:
+                    translateY(0)
+                    rotate(0deg);
+            }
+
+
+            20% {
+
+                transform:
+                    translateY(-10px)
+                    rotate(-2deg);
+            }
+
+
+            40% {
+
+                transform:
+                    translateY(9px)
+                    rotate(2deg);
+            }
+
+
+            60% {
+
+                transform:
+                    translateY(-8px)
+                    rotate(-2deg);
+            }
+
+
+            80% {
+
+                transform:
+                    translateY(7px)
+                    rotate(2deg);
+            }
+
+
+            100% {
+
+                right: 110%;
+
+                transform:
+                    translateY(0)
+                    rotate(0deg);
+            }
+        }
+
+
+        @keyframes fishBody {
+
+            0% {
+                transform:
+                    rotate(-3deg);
+            }
+
+            50% {
+                transform:
+                    rotate(3deg);
+            }
+
+            100% {
+                transform:
+                    rotate(-3deg);
+            }
+        }
+
+
+        /* ==========================================
+           SEA LIFE
+        ========================================== */
+
+        .jellyfish {
+
+            position: fixed;
+
+            right: 8%;
+
+            top: 18%;
+
+            z-index: 3;
+
+            font-size: 70px;
+
+            opacity: 0.45;
+
+            pointer-events: none;
+
+            animation:
+                jelly
+                7s
+                ease-in-out
+                infinite;
+        }
+
+
+        .jellyfish.two {
+
+            right: 18%;
+
+            top: 58%;
+
+            font-size: 42px;
+
+            animation-delay: 2s;
+        }
+
+
+        @keyframes jelly {
+
+            0%,
+            100% {
+                transform:
+                    translateY(0)
+                    rotate(-2deg);
+            }
+
+            50% {
+                transform:
+                    translateY(-25px)
+                    rotate(3deg);
+            }
+        }
+
+
+        /* ==========================================
+           CORAL
+        ========================================== */
+
+        .coral {
+
+            position: fixed;
+
+            bottom: -15px;
+
+            z-index: 3;
+
+            pointer-events: none;
+
+            font-size: 85px;
+        }
+
+
+        .coral-left {
+            left: 0;
+        }
+
+
+        .coral-right {
+            right: 0;
+        }
+
+
+        /* ==========================================
+           MAIN CARD
+        ========================================== */
+
+        .main {
+
+            position: relative;
+
+            z-index: 10;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 25px;
+        }
+
+
+        .welcome-card {
+
+            width: 560px;
+
+            padding: 50px 45px;
+
+            text-align: center;
+
+            border-radius: 28px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(35,190,235,0.22),
+                    rgba(0,55,110,0.52)
+                );
+
+            backdrop-filter:
+                blur(15px);
+
+            -webkit-backdrop-filter:
+                blur(15px);
+
+            border:
+                1px solid
+                rgba(165,245,255,0.7);
+
+            box-shadow:
+
+                0 20px 45px
+                rgba(0,15,40,0.5);
+
+            transition:
+                0.35s ease;
+        }
+
+
+        .welcome-card:hover {
+
+            transform:
+                translateY(-6px);
+
+            box-shadow:
+
+                0 25px 50px
+                rgba(0,15,40,0.58);
+        }
+
+
+        /* ==========================================
+           LOGO
+        ========================================== */
+
+        .logo {
+
+            font-size: 48px;
+
+            font-weight: bold;
+
+            margin-bottom: 12px;
+
+            text-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.45);
+        }
+
+
+        .logo span {
+
+            color:
+                #48eaff;
+        }
+
+
+        .tagline {
+
+            font-size: 19px;
+
+            line-height: 1.6;
+
+            margin-bottom: 35px;
+
+            color:
+                rgba(255,255,255,0.92);
+        }
+
+
+        /* ==========================================
+           BUTTONS
+        ========================================== */
+
+        .buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 18px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .btn {
+
+            display: inline-block;
+
+            min-width: 175px;
+
+            padding: 15px 28px;
+
+            border-radius: 14px;
+
+            text-decoration: none;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            border:
+                1px solid
+                rgba(180,250,255,0.6);
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #16b9dc,
+                    #0874a8
+                );
+
+            box-shadow:
+                0 8px 18px
+                rgba(0,25,55,0.35);
+
+            transition:
+                0.3s ease;
+        }
+
+
+        .btn:hover {
+
+            transform:
+                translateY(-4px);
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #25d5ef,
+                    #0a8ac0
+                );
+
+            box-shadow:
+                0 12px 25px
+                rgba(0,25,55,0.45);
+        }
+
+
+        .btn-register {
+
+            background:
+
+                rgba(0,65,105,0.55);
+        }
+
+
+        .btn-register:hover {
+
+            background:
+
+                rgba(20,120,155,0.65);
+        }
+
+
+        /* ==========================================
+           FOOTER
+        ========================================== */
+
+        .footer {
+
+            margin-top: 30px;
+
+            font-size: 13px;
+
+            opacity: 0.75;
+        }
+
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media (max-width: 600px) {
+
+            .welcome-card {
+
+                width: 95%;
+
+                padding: 38px 22px;
+            }
+
+
+            .logo {
+
+                font-size: 36px;
+            }
+
+
+            .tagline {
+
+                font-size: 16px;
+            }
+
+
+            .buttons {
+
+                flex-direction: column;
+            }
+
+
+            .btn {
+
+                width: 100%;
+            }
+
+
+            .fish {
+
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================
+         OCEAN LIGHT
+    ========================================== -->
+
+    <div class="ocean-light"></div>
+
+
+    <!-- ==========================================
+         BUBBLES
+    ========================================== -->
+
+    <div class="bubbles">
+
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+
+    </div>
+
+
+    <!-- ==========================================
+         FISH
+    ========================================== -->
+
+    <div class="fish fish-1">
+        <span>🐠</span>
+    </div>
+
+    <div class="fish fish-2">
+        <span>🐟</span>
+    </div>
+
+    <div class="fish fish-3">
+        <span>🐡</span>
+    </div>
+
+    <div class="fish fish-4">
+        <span>🐠</span>
+    </div>
+
+
+    <!-- ==========================================
+         JELLYFISH
+    ========================================== -->
+
+    <div class="jellyfish">
+        🪼
+    </div>
+
+    <div class="jellyfish two">
+        🪼
+    </div>
+
+
+    <!-- ==========================================
+         CORAL
+    ========================================== -->
+
+    <div class="coral coral-left">
+        🪸🌿
+    </div>
+
+    <div class="coral coral-right">
+        🌿🪸
+    </div>
+
+
+    <!-- ==========================================
+         MAIN
+    ========================================== -->
+
+    <main class="main">
+
+        <div class="welcome-card">
+
+
+            <div class="logo">
+
+                🧠 LifeLens
+                <span>AI</span>
+
+            </div>
+
+
+            <p class="tagline">
+
+                Your intelligent companion for
+                understanding and improving
+                your everyday life.
+
+            </p>
+
+
+            <div class="buttons">
+
+
+                <a
+                    href="{{ url_for('login') }}"
+                    class="btn"
+                >
+
+                    🔐 Login
+
+                </a>
+
+
+                <a
+                    href="{{ url_for('register') }}"
+                    class="btn btn-register"
+                >
+
+                    ✨ Create Account
+
+                </a>
+
+
+            </div>
+
+
+            <div class="footer">
+
+                Your life. Your journey.
+                Your insights. 💙
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+</body>
+
+</html>

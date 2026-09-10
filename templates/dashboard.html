@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>LifeLens AI - Dashboard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+
+            background:
+                radial-gradient(
+                    ellipse at 50% -10%,
+                    rgba(80, 230, 255, 0.5),
+                    transparent 40%
+                ),
+                linear-gradient(
+                    180deg,
+                    #021a45 0%,
+                    #023d6b 30%,
+                    #00647d 65%,
+                    #012f48 100%
+                );
+        }
+
+        /* =====================================================
+           OCEAN LIGHT
+        ===================================================== */
+
+        .ocean-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ocean-light::before {
+            content: "";
+            position: absolute;
+            top: -20%;
+            left: 5%;
+            width: 90%;
+            height: 120%;
+
+            background:
+                linear-gradient(
+                    110deg,
+                    transparent 20%,
+                    rgba(120,245,255,0.17) 35%,
+                    transparent 48%
+                ),
+                linear-gradient(
+                    70deg,
+                    transparent 30%,
+                    rgba(100,230,255,0.14) 45%,
+                    transparent 58%
+                );
+
+            filter: blur(8px);
+
+            animation:
+                waterLight
+                10s
+                ease-in-out
+                infinite
+                alternate;
+        }
+
+        @keyframes waterLight {
+
+            from {
+                transform:
+                    translateX(-25px);
+            }
+
+            to {
+                transform:
+                    translateX(30px);
+            }
+
+        }
+
+        /* =====================================================
+           BUBBLES
+        ===================================================== */
+
+        .bubbles {
+            position: fixed;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -50px;
+            border-radius: 50%;
+
+            border:
+                1px solid
+                rgba(220,250,255,0.65);
+
+            background:
+                radial-gradient(
+                    circle at 30% 25%,
+                    rgba(255,255,255,0.65),
+                    rgba(120,220,255,0.08) 55%,
+                    transparent 70%
+                );
+
+            animation:
+                bubbleRise
+                linear
+                infinite;
+        }
+
+        .bubble:nth-child(1) {
+            width: 8px;
+            height: 8px;
+            left: 5%;
+            animation-duration: 11s;
+        }
+
+        .bubble:nth-child(2) {
+            width: 14px;
+            height: 14px;
+            left: 15%;
+            animation-duration: 15s;
+            animation-delay: 2s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 6px;
+            height: 6px;
+            left: 28%;
+            animation-duration: 9s;
+            animation-delay: 4s;
+        }
+
+        .bubble:nth-child(4) {
+            width: 11px;
+            height: 11px;
+            left: 40%;
+            animation-duration: 13s;
+            animation-delay: 1s;
+        }
+
+        .bubble:nth-child(5) {
+            width: 18px;
+            height: 18px;
+            left: 53%;
+            animation-duration: 17s;
+            animation-delay: 5s;
+        }
+
+        .bubble:nth-child(6) {
+            width: 7px;
+            height: 7px;
+            left: 68%;
+            animation-duration: 11s;
+            animation-delay: 3s;
+        }
+
+        .bubble:nth-child(7) {
+            width: 13px;
+            height: 13px;
+            left: 80%;
+            animation-duration: 14s;
+            animation-delay: 7s;
+        }
+
+        .bubble:nth-child(8) {
+            width: 8px;
+            height: 8px;
+            left: 93%;
+            animation-duration: 12s;
+            animation-delay: 2s;
+        }
+
+        @keyframes bubbleRise {
+
+            0% {
+                transform:
+                    translateY(0)
+                    translateX(0);
+                opacity: 0;
+            }
+
+            15% {
+                opacity: 0.8;
+            }
+
+            50% {
+                transform:
+                    translateY(-50vh)
+                    translateX(25px);
+            }
+
+            100% {
+                transform:
+                    translateY(-115vh)
+                    translateX(-25px);
+                opacity: 0;
+            }
+
+        }
+
+        /* =====================================================
+           FISH
+           RIGHT → LEFT
+        ===================================================== */
+
+        .fish {
+            position: fixed;
+            right: -180px;
+            z-index: 25;
+            pointer-events: none;
+            line-height: 1;
+
+            animation-name:
+                swimRightLeft;
+
+            animation-timing-function:
+                linear;
+
+            animation-iteration-count:
+                infinite;
+        }
+
+        .fish-1 {
+            top: 24%;
+            font-size: 55px;
+            animation-duration: 17s;
+        }
+
+        .fish-2 {
+            top: 38%;
+            font-size: 42px;
+            animation-duration: 22s;
+            animation-delay: 3s;
+        }
+
+        .fish-3 {
+            top: 52%;
+            font-size: 48px;
+            animation-duration: 19s;
+            animation-delay: 6s;
+        }
+
+        .fish-4 {
+            top: 67%;
+            font-size: 36px;
+            animation-duration: 25s;
+            animation-delay: 9s;
+        }
+
+        .fish-5 {
+            top: 31%;
+            font-size: 32px;
+            animation-duration: 28s;
+            animation-delay: 12s;
+        }
+
+        .fish span {
+            display: inline-block;
+
+            animation:
+                fishBody
+                0.65s
+                ease-in-out
+                infinite
+                alternate;
+        }
+
+        @keyframes fishBody {
+
+            0% {
+                transform:
+                    rotate(-3deg)
+                    scaleY(0.96);
+            }
+
+            50% {
+                transform:
+                    rotate(3deg)
+                    scaleY(1.03);
+            }
+
+            100% {
+                transform:
+                    rotate(-3deg)
+                    scaleY(0.96);
+            }
+
+        }
+
+        @keyframes swimRightLeft {
+
+            0% {
+                right: -180px;
+                transform:
+                    translateY(0);
+            }
+
+            12% {
+                transform:
+                    translateY(-9px);
+            }
+
+            25% {
+                transform:
+                    translateY(8px);
+            }
+
+            38% {
+                transform:
+                    translateY(-10px);
+            }
+
+            50% {
+                transform:
+                    translateY(8px);
+            }
+
+            63% {
+                transform:
+                    translateY(-8px);
+            }
+
+            76% {
+                transform:
+                    translateY(7px);
+            }
+
+            88% {
+                transform:
+                    translateY(-5px);
+            }
+
+            100% {
+                right: 110%;
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+        /* =====================================================
+           JELLYFISH
+        ===================================================== */
+
+        .jellyfish {
+            position: fixed;
+            right: 7%;
+            top: 18%;
+            z-index: 3;
+            font-size: 72px;
+            opacity: 0.55;
+            pointer-events: none;
+
+            animation:
+                jellyFloat
+                7s
+                ease-in-out
+                infinite;
+        }
+
+        .jellyfish-small {
+            right: 17%;
+            top: 32%;
+            font-size: 42px;
+            opacity: 0.38;
+            animation-delay: 2s;
+        }
+
+        @keyframes jellyFloat {
+
+            0%,
+            100% {
+                transform:
+                    translateY(0)
+                    rotate(-2deg);
+            }
+
+            50% {
+                transform:
+                    translateY(-28px)
+                    rotate(3deg);
+            }
+
+        }
+
+        /* =====================================================
+           CORAL
+        ===================================================== */
+
+        .coral {
+            position: fixed;
+            bottom: -12px;
+            z-index: 2;
+            pointer-events: none;
+            font-size: 90px;
+        }
+
+        .coral-left {
+            left: 0;
+        }
+
+        .coral-middle {
+            left: 43%;
+            font-size: 65px;
+        }
+
+        .coral-right {
+            right: 0;
+        }
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+            position: relative;
+            z-index: 40;
+            width: 100%;
+
+            padding:
+                22px 5%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+
+            text-shadow:
+                0 3px 10px
+                rgba(0,0,0,0.4);
+        }
+
+        .logo span {
+            color: #48eaff;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .logout {
+            text-decoration: none;
+            color: white;
+
+            padding:
+                11px 23px;
+
+            border-radius: 30px;
+
+            border:
+                1px solid
+                rgba(150,245,255,0.7);
+
+            background:
+                rgba(0,70,110,0.35);
+
+            backdrop-filter:
+                blur(8px);
+
+            transition:
+                0.3s ease;
+        }
+
+        .logout:hover {
+            transform:
+                translateY(-3px);
+
+            background:
+                rgba(30,130,170,0.45);
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 1180px;
+
+            margin:
+                25px auto 0;
+        }
+
+        .welcome {
+            text-align: center;
+            margin-bottom: 38px;
+        }
+
+        .welcome h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+
+            text-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.45);
+        }
+
+        .welcome p {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+
+        /* =====================================================
+           CARDS
+        ===================================================== */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 22px;
+
+            perspective: 1400px;
+        }
+
+        .card {
+            position: relative;
+            min-height: 190px;
+            padding: 25px;
+
+            border-radius: 20px;
+
+            display: flex;
+            align-items: center;
+            gap: 19px;
+
+            text-decoration: none;
+            color: white;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(35,190,235,0.22),
+                    rgba(0,55,110,0.48)
+                );
+
+            backdrop-filter:
+                blur(8px);
+
+            -webkit-backdrop-filter:
+                blur(8px);
+
+            border:
+                1px solid
+                rgba(165,245,255,0.72);
+
+            box-shadow:
+                0 14px 28px
+                rgba(0,15,40,0.42),
+
+                inset 0 0 14px
+                rgba(100,220,255,0.06);
+
+            transform-style:
+                preserve-3d;
+
+            transition:
+                transform 0.35s ease,
+                background 0.35s ease;
+        }
+
+        .card:hover {
+            transform:
+                translateY(-9px)
+                rotateX(4deg)
+                rotateY(-4deg)
+                scale(1.015);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(35,205,245,0.29),
+                    rgba(0,65,125,0.52)
+                );
+
+            box-shadow:
+                0 20px 38px
+                rgba(0,15,40,0.5);
+        }
+
+        /* =====================================================
+           ICON
+        ===================================================== */
+
+        .icon {
+            width: 82px;
+            height: 82px;
+            min-width: 82px;
+
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 44px;
+
+            background:
+                radial-gradient(
+                    circle at 35% 25%,
+                    rgba(255,255,255,0.28),
+                    rgba(0,120,200,0.38)
+                );
+
+            border:
+                1px solid
+                rgba(190,250,255,0.55);
+
+            box-shadow:
+                inset 0 0 16px
+                rgba(120,235,255,0.15),
+
+                0 7px 15px
+                rgba(0,0,0,0.28);
+
+            transform:
+                translateZ(30px);
+
+            transition:
+                0.35s ease;
+        }
+
+        .card:hover .icon {
+            transform:
+                translateZ(48px)
+                scale(1.08);
+        }
+
+        /* =====================================================
+           CARD TEXT
+        ===================================================== */
+
+        .content {
+            transform:
+                translateZ(22px);
+        }
+
+        .content h2 {
+            font-size: 21px;
+            margin-bottom: 9px;
+        }
+
+        .content p {
+            font-size: 14px;
+            line-height: 1.5;
+
+            color:
+                rgba(255,255,255,0.9);
+        }
+
+        /* =====================================================
+           ARROW
+        ===================================================== */
+
+        .arrow {
+            position: absolute;
+
+            right: 15px;
+            bottom: 14px;
+
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 22px;
+
+            background:
+                rgba(120,225,250,0.13);
+
+            border:
+                1px solid
+                rgba(200,250,255,0.55);
+
+            transition:
+                0.3s ease;
+        }
+
+        .card:hover .arrow {
+            transform:
+                translateX(5px);
+
+            background:
+                rgba(120,225,250,0.25);
+        }
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+            text-align: center;
+
+            margin-top: 40px;
+            padding-bottom: 35px;
+
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* =====================================================
+           TABLET
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .cards {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .welcome h1 {
+                font-size: 35px;
+            }
+
+        }
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding:
+                    18px 20px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            .user-area span {
+                display: none;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .welcome h1 {
+                font-size: 28px;
+            }
+
+            .welcome p {
+                font-size: 15px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                min-height: 165px;
+            }
+
+            .icon {
+                width: 70px;
+                height: 70px;
+                min-width: 70px;
+                font-size: 37px;
+            }
+
+            .fish {
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- =====================================================
+         OCEAN LIGHT
+    ===================================================== -->
+
+    <div class="ocean-light"></div>
+
+
+    <!-- =====================================================
+         BUBBLES
+    ===================================================== -->
+
+    <div class="bubbles">
+
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+        <span class="bubble"></span>
+
+    </div>
+
+
+    <!-- =====================================================
+         FISH
+    ===================================================== -->
+
+    <div class="fish fish-1">
+        <span>🐠</span>
+    </div>
+
+    <div class="fish fish-2">
+        <span>🐟</span>
+    </div>
+
+    <div class="fish fish-3">
+        <span>🐡</span>
+    </div>
+
+    <div class="fish fish-4">
+        <span>🐠</span>
+    </div>
+
+    <div class="fish fish-5">
+        <span>🐟</span>
+    </div>
+
+
+    <!-- =====================================================
+         JELLYFISH
+    ===================================================== -->
+
+    <div class="jellyfish">
+        🪼
+    </div>
+
+    <div class="jellyfish jellyfish-small">
+        🪼
+    </div>
+
+
+    <!-- =====================================================
+         CORAL
+    ===================================================== -->
+
+    <div class="coral coral-left">
+        🪸🌿
+    </div>
+
+    <div class="coral coral-middle">
+        🪸
+    </div>
+
+    <div class="coral coral-right">
+        🌿🪸
+    </div>
+
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
+
+    <header class="header">
+
+        <div class="logo">
+            🧠 LifeLens
+            <span>AI</span>
+        </div>
+
+        <div class="user-area">
+
+            <span>
+                Good afternoon, {{ name }}! ☀️
+            </span>
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="logout"
+            >
+                ⇥ &nbsp; Logout
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN
+    ===================================================== -->
+
+    <main class="container">
+
+        <section class="welcome">
+
+            <h1>
+                Welcome back, {{ name }}! 👋
+            </h1>
+
+            <p>
+                Your personal day-to-day life companion
+            </p>
+
+        </section>
+
+
+        <section class="cards">
+
+
+            <!-- MONEY TRACK -->
+
+            <a
+                href="{{ url_for('money') }}"
+                class="card"
+            >
+
+                <div class="icon">
+                    💰
+                </div>
+
+                <div class="content">
+
+                    <h2>
+                        Money Track
+                    </h2>
+
+                    <p>
+                        Track your income,
+                        expenses and balance.
+                    </p>
+
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+            </a>
+
+
+            <!-- MY NOTES -->
+
+            <a
+                href="{{ url_for('notes') }}"
+                class="card"
+            >
+
+                <div class="icon">
+                    📝
+                </div>
+
+                <div class="content">
+
+                    <h2>
+                        My Notes
+                    </h2>
+
+                    <p>
+                        Save your thoughts,
+                        ideas and important notes.
+                    </p>
+
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+            </a>
+
+
+            <!-- MOOD -->
+
+            <a
+                href="{{ url_for('mood') }}"
+                class="card"
+            >
+
+                <div class="icon">
+                    😊
+                </div>
+
+                <div class="content">
+
+                    <h2>
+                        Mood
+                    </h2>
+
+                    <p>
+                        Track your daily mood
+                        and understand your feelings.
+                    </p>
+
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+            </a>
+
+
+            <!-- STRESS -->
+
+            <a
+                href="{{ url_for('stress') }}"
+                class="card"
+            >
+
+                <div class="icon">
+                    🧘
+                </div>
+
+                <div class="content">
+
+                    <h2>
+                        Stress
+                    </h2>
+
+                    <p>
+                        Monitor your stress
+                        levels throughout your day.
+                    </p>
+
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+            </a>
+
+
+            <!-- =================================================
+                 SLEEP — FIXED
+            ================================================== -->
+
+            <a
+                href="{{ url_for('sleep') }}"
+                class="card"
+            >
+
+                <div class="icon">
+                    😴
+                </div>
+
+                <div class="content">
+
+                    <h2>
+                        Sleep
+                    </h2>
+
+                    <p>
+                        Track your sleeping
+                        habits and sleep quality.
+                    </p>
+
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+            </a>
+
+<!-- ENERGY -->
+
+<a
+    href="{{ url_for('energy') }}"
+    class="card"
+>
+
+    <div class="icon">
+        ⚡
+    </div>
+
+    <div class="content">
+
+        <h2>
+            Energy
+        </h2>
+
+        <p>
+            Record your daily
+            energy levels.
+        </p>
+
+    </div>
+
+    <div class="arrow">
+        →
+    </div>
+
+</a>
+           
+
+
+            <!-- DAILY CHECK-IN -->
+
+            <a
+                href="{{ url_for('daily_checkin') }}"
+                class="card"
+            >
+
+                <div class="icon">
+                    📅
+                </div>
+
+                <div class="content">
+
+                    <h2>
+                        Daily Check-in
+                    </h2>
+
+                    <p>
+                        Keep track of how
+                        your day is going.
+                    </p>
+
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+            </a>
+
+
+            <!-- PROGRESS -->
+
+            <a
+                href="{{ url_for('progress') }}"
+                class="card"
+            >
+
+                <div class="icon">
+                    📈
+                </div>
+
+                <div class="content">
+
+                    <h2>
+                        Progress
+                    </h2>
+
+                    <p>
+                        See your personal
+                        progress over time.
+                    </p>
+
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+            </a>
+
+
+           <a
+    href="{{ url_for('ai_insights') }}"
+    class="card"
+>
+    <div class="icon">
+        🤖
+    </div>
+
+    <div class="content">
+        <h2>
+            AI Insights
+        </h2>
+
+        <p>
+            Get intelligent insights
+            about your daily life.
+        </p>
+    </div>
+
+    <div class="arrow">
+        →
+    </div>
+</a>
+
+
+        </section>
+
+
+        <footer class="footer">
+
+            LifeLens AI • Your personal life companion 💙
+
+        </footer>
+
+    </main>
+
+</body>
+
+</html>

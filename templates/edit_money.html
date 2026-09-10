@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Money | LifeLens AI</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #063b52,
+                    #087e8b,
+                    #00a6a6,
+                    #075985
+                );
+
+            background-size: 400% 400%;
+
+            animation: oceanMove 15s ease infinite;
+
+            color: white;
+        }
+
+
+        @keyframes oceanMove {
+
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+
+        .box {
+
+            width: 100%;
+
+            max-width: 550px;
+
+            padding: 35px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(255,255,255,0.14);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.25);
+
+            backdrop-filter: blur(15px);
+
+            box-shadow:
+                0 20px 45px
+                rgba(0,0,0,0.25);
+        }
+
+
+        h1 {
+
+            text-align: center;
+
+            margin-bottom: 8px;
+
+            font-size: 30px;
+        }
+
+
+        .subtitle {
+
+            text-align: center;
+
+            opacity: 0.75;
+
+            margin-bottom: 25px;
+
+            font-size: 14px;
+        }
+
+
+        .error {
+
+            background:
+                rgba(220,38,38,0.3);
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            margin-bottom: 18px;
+
+            text-align: center;
+        }
+
+
+        .field {
+
+            margin-bottom: 18px;
+        }
+
+
+        label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 14px;
+        }
+
+
+        input,
+        select {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.25);
+
+            outline: none;
+
+            background:
+                rgba(255,255,255,0.12);
+
+            color: white;
+
+            font-size: 15px;
+        }
+
+
+        input:focus,
+        select:focus {
+
+            border-color: white;
+
+            background:
+                rgba(255,255,255,0.18);
+        }
+
+
+        select option {
+
+            color: black;
+
+            background: white;
+        }
+
+
+        .buttons {
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 25px;
+        }
+
+
+        button,
+        .cancel {
+
+            flex: 1;
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            transition: 0.3s;
+        }
+
+
+        button {
+
+            border: none;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #00d4ff,
+                    #00a6a6
+                );
+        }
+
+
+        .cancel {
+
+            background:
+                rgba(255,255,255,0.13);
+
+            color: white;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.25);
+        }
+
+
+        button:hover,
+        .cancel:hover {
+
+            transform: translateY(-3px);
+
+            filter: brightness(1.1);
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="box">
+
+
+    <h1>
+        ✏️ Edit Transaction
+    </h1>
+
+
+    <div class="subtitle">
+        Update your money transaction
+    </div>
+
+
+    {% if error %}
+
+    <div class="error">
+        ⚠️ {{ error }}
+    </div>
+
+    {% endif %}
+
+
+    <form
+        method="POST"
+        action="{{ url_for(
+            'edit_money',
+            transaction_id=transaction.id
+        ) }}"
+    >
+
+
+        <!-- TYPE -->
+
+        <div class="field">
+
+            <label>
+                Transaction Type
+            </label>
+
+
+            <select
+                name="transaction_type"
+                required
+            >
+
+                <option
+                    value="Income"
+                    {% if transaction.transaction_type == "Income" %}
+                    selected
+                    {% endif %}
+                >
+                    💚 Income
+                </option>
+
+
+                <option
+                    value="Expense"
+                    {% if transaction.transaction_type == "Expense" %}
+                    selected
+                    {% endif %}
+                >
+                    ❤️ Expense
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- CATEGORY -->
+
+        <div class="field">
+
+            <label>
+                Category
+            </label>
+
+
+            <select
+                name="category"
+                required
+            >
+
+                <option
+                    value="Food"
+                    {% if transaction.category == "Food" %}
+                    selected
+                    {% endif %}
+                >
+                    🍔 Food
+                </option>
+
+
+                <option
+                    value="Shopping"
+                    {% if transaction.category == "Shopping" %}
+                    selected
+                    {% endif %}
+                >
+                    🛒 Shopping
+                </option>
+
+
+                <option
+                    value="Transport"
+                    {% if transaction.category == "Transport" %}
+                    selected
+                    {% endif %}
+                >
+                    🚗 Transport
+                </option>
+
+
+                <option
+                    value="Rent"
+                    {% if transaction.category == "Rent" %}
+                    selected
+                    {% endif %}
+                >
+                    🏠 Rent
+                </option>
+
+
+                <option
+                    value="Bills"
+                    {% if transaction.category == "Bills" %}
+                    selected
+                    {% endif %}
+                >
+                    💡 Bills
+                </option>
+
+
+                <option
+                    value="Education"
+                    {% if transaction.category == "Education" %}
+                    selected
+                    {% endif %}
+                >
+                    🎓 Education
+                </option>
+
+
+                <option
+                    value="Health"
+                    {% if transaction.category == "Health" %}
+                    selected
+                    {% endif %}
+                >
+                    💊 Health
+                </option>
+
+
+                <option
+                    value="Entertainment"
+                    {% if transaction.category == "Entertainment" %}
+                    selected
+                    {% endif %}
+                >
+                    🎬 Entertainment
+                </option>
+
+
+                <option
+                    value="Salary"
+                    {% if transaction.category == "Salary" %}
+                    selected
+                    {% endif %}
+                >
+                    💼 Salary
+                </option>
+
+
+                <option
+                    value="Other"
+                    {% if transaction.category == "Other" %}
+                    selected
+                    {% endif %}
+                >
+                    📦 Other
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- AMOUNT -->
+
+        <div class="field">
+
+            <label>
+                Amount
+            </label>
+
+
+            <input
+                type="number"
+                name="amount"
+                value="{{ transaction.amount }}"
+                min="0.01"
+                step="0.01"
+                required
+            >
+
+        </div>
+
+
+        <!-- DESCRIPTION -->
+
+        <div class="field">
+
+            <label>
+                Description
+            </label>
+
+
+            <input
+                type="text"
+                name="description"
+                value="{{ transaction.description or '' }}"
+                placeholder="Example: Monthly groceries"
+            >
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+
+            <a
+                href="{{ url_for('money') }}"
+                class="cancel"
+            >
+                ← Cancel
+            </a>
+
+
+            <button type="submit">
+
+                💾 Save Changes
+
+            </button>
+
+
+        </div>
+
+
+    </form>
+
+
+</div>
+
+
+</body>
+
+</html>

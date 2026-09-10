@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Edit Mood - LifeLens AI</title>
+
+<style>
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    color: white;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 20px;
+
+    background:
+        radial-gradient(
+            ellipse at 50% -10%,
+            rgba(80,230,255,0.5),
+            transparent 40%
+        ),
+        linear-gradient(
+            180deg,
+            #021a45,
+            #023d6b,
+            #00647d,
+            #012f48
+        );
+}
+
+.box {
+
+    width: 90%;
+
+    max-width: 550px;
+
+    padding: 30px;
+
+    border-radius: 22px;
+
+    background:
+        rgba(0,55,100,0.55);
+
+    border:
+        1px solid
+        rgba(170,245,255,0.65);
+
+    backdrop-filter: blur(12px);
+
+    text-align: center;
+}
+
+select,
+textarea {
+
+    width: 100%;
+
+    padding: 13px;
+
+    margin: 10px 0 18px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    box-sizing: border-box;
+}
+
+textarea {
+
+    min-height: 120px;
+
+    resize: vertical;
+}
+
+button,
+a {
+
+    display: inline-block;
+
+    padding: 12px 22px;
+
+    border: none;
+
+    border-radius: 22px;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    color: white;
+
+    margin: 5px;
+}
+
+button {
+
+    background:
+        rgba(0,155,205,0.9);
+}
+
+a {
+
+    background:
+        rgba(100,100,100,0.6);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>✏️ Edit Mood</h1>
+
+<form method="POST">
+
+<select name="mood" required>
+
+<option value="Happy"
+{% if mood.mood == "Happy" %}selected{% endif %}
+>
+😄 Happy
+</option>
+
+<option value="Good"
+{% if mood.mood == "Good" %}selected{% endif %}
+>
+🙂 Good
+</option>
+
+<option value="Neutral"
+{% if mood.mood == "Neutral" %}selected{% endif %}
+>
+😐 Neutral
+</option>
+
+<option value="Sad"
+{% if mood.mood == "Sad" %}selected{% endif %}
+>
+😔 Sad
+</option>
+
+<option value="Stressed"
+{% if mood.mood == "Stressed" %}selected{% endif %}
+>
+😣 Stressed
+</option>
+
+</select>
+
+
+<textarea name="note">{{ mood.note or "" }}</textarea>
+
+
+<button type="submit">
+💾 Update Mood
+</button>
+
+<a href="{{ url_for('mood') }}">
+Cancel
+</a>
+
+</form>
+
+</div>
+
+</body>
+
+</html>

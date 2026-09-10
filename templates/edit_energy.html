@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>LifeLens AI - Edit Energy</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: white;
+
+    padding: 30px;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(40,160,200,0.45),
+            transparent 35%
+        ),
+
+        linear-gradient(
+            135deg,
+            #061d4a 0%,
+            #06466b 45%,
+            #087b91 100%
+        );
+}
+
+.container {
+
+    width: 90%;
+
+    max-width: 850px;
+
+    margin: auto;
+}
+
+.header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 30px;
+}
+
+.header h1 {
+
+    font-size: 38px;
+}
+
+.back-btn {
+
+    text-decoration: none;
+
+    color: white;
+
+    padding: 12px 22px;
+
+    border-radius: 25px;
+
+    background:
+        rgba(0,90,130,0.55);
+
+    border:
+        1px solid
+        rgba(170,245,255,0.7);
+}
+
+.sleep-box {
+
+    padding: 30px;
+
+    border-radius: 22px;
+
+    background:
+        rgba(0,55,100,0.48);
+
+    border:
+        1px solid
+        rgba(170,245,255,0.65);
+
+    backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 20px 45px
+        rgba(0,15,45,0.45);
+}
+
+.sleep-box h2 {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+}
+
+.error {
+
+    background:
+        rgba(255,60,60,0.25);
+
+    border:
+        1px solid #ff7777;
+
+    padding: 13px;
+
+    border-radius: 8px;
+
+    margin-bottom: 20px;
+}
+
+.form-group {
+
+    margin-bottom: 22px;
+}
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-weight: bold;
+}
+
+
+/* ENERGY OPTIONS */
+
+.energy-options {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5,1fr);
+
+    gap: 12px;
+}
+
+.energy-option input {
+
+    display: none;
+}
+
+.energy-option label {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 105px;
+
+    padding: 10px;
+
+    border-radius: 18px;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    background:
+        rgba(0,70,110,0.45);
+
+    border:
+        1px solid
+        rgba(170,245,255,0.4);
+
+    transition: 0.3s;
+}
+
+.energy-option label:hover {
+
+    transform: translateY(-4px);
+
+    background:
+        rgba(0,120,160,0.5);
+}
+
+.energy-option input:checked + label {
+
+    transform: translateY(-4px);
+
+    background:
+        rgba(0,160,205,0.55);
+
+    border:
+        2px solid
+        rgba(190,250,255,0.95);
+}
+
+.energy-icon {
+
+    font-size: 34px;
+
+    margin-bottom: 6px;
+}
+
+
+/* NOTE */
+
+textarea {
+
+    width: 100%;
+
+    min-height: 120px;
+
+    resize: vertical;
+
+    padding: 14px;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 14px;
+
+    font-size: 16px;
+
+    background:
+        rgba(255,255,255,0.96);
+
+    color: #123;
+}
+
+
+/* BUTTON */
+
+.save-btn {
+
+    display: block;
+
+    width: 100%;
+
+    margin: auto;
+
+    border: none;
+
+    cursor: pointer;
+
+    color: white;
+
+    padding: 14px 30px;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    background:
+        rgba(0,155,205,0.85);
+}
+
+.save-btn:hover {
+
+    background:
+        rgba(0,195,230,0.95);
+}
+
+
+/* MOBILE */
+
+@media (max-width:700px) {
+
+    body {
+
+        padding: 18px 12px;
+    }
+
+    .container {
+
+        width: 100%;
+    }
+
+    .header {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+        text-align: center;
+    }
+
+    .energy-options {
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .sleep-box {
+
+        padding: 22px 15px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<div class="header">
+
+    <h1>
+        ⚡ Edit Energy
+    </h1>
+
+    <a
+        href="{{ url_for('energy') }}"
+        class="back-btn"
+    >
+        ← Back to Energy
+    </a>
+
+</div>
+
+
+<div class="sleep-box">
+
+    <h2>
+        Update Your Energy Record
+    </h2>
+
+
+    {% if error %}
+
+    <div class="error">
+        {{ error }}
+    </div>
+
+    {% endif %}
+
+
+    <form
+        method="POST"
+        action="{{ url_for('edit_energy', id=energy_record.id) }}"
+    >
+
+
+        <div class="form-group">
+
+            <label>
+                Energy Level
+            </label>
+
+
+            <div class="energy-options">
+
+
+                <div class="energy-option">
+
+                    <input
+                        type="radio"
+                        id="very_high"
+                        name="energy_level"
+                        value="Very High"
+
+                        {% if energy_record.energy_level == "Very High" %}
+                        checked
+                        {% endif %}
+
+                        required
+                    >
+
+                    <label for="very_high">
+
+                        <span class="energy-icon">
+                            🔥
+                        </span>
+
+                        Very High
+
+                    </label>
+
+                </div>
+
+
+                <div class="energy-option">
+
+                    <input
+                        type="radio"
+                        id="high"
+                        name="energy_level"
+                        value="High"
+
+                        {% if energy_record.energy_level == "High" %}
+                        checked
+                        {% endif %}
+                    >
+
+                    <label for="high">
+
+                        <span class="energy-icon">
+                            ⚡
+                        </span>
+
+                        High
+
+                    </label>
+
+                </div>
+
+
+                <div class="energy-option">
+
+                    <input
+                        type="radio"
+                        id="moderate"
+                        name="energy_level"
+                        value="Moderate"
+
+                        {% if energy_record.energy_level == "Moderate" %}
+                        checked
+                        {% endif %}
+                    >
+
+                    <label for="moderate">
+
+                        <span class="energy-icon">
+                            🙂
+                        </span>
+
+                        Moderate
+
+                    </label>
+
+                </div>
+
+
+                <div class="energy-option">
+
+                    <input
+                        type="radio"
+                        id="low"
+                        name="energy_level"
+                        value="Low"
+
+                        {% if energy_record.energy_level == "Low" %}
+                        checked
+                        {% endif %}
+                    >
+
+                    <label for="low">
+
+                        <span class="energy-icon">
+                            😴
+                        </span>
+
+                        Low
+
+                    </label>
+
+                </div>
+
+
+                <div class="energy-option">
+
+                    <input
+                        type="radio"
+                        id="very_low"
+                        name="energy_level"
+                        value="Very Low"
+
+                        {% if energy_record.energy_level == "Very Low" %}
+                        checked
+                        {% endif %}
+                    >
+
+                    <label for="very_low">
+
+                        <span class="energy-icon">
+                            🪫
+                        </span>
+
+                        Very Low
+
+                    </label>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="note">
+                Note
+            </label>
+
+            <textarea
+                id="note"
+                name="note"
+                placeholder="How are you feeling today?"
+            >{{ energy_record.note or "" }}</textarea>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="save-btn"
+        >
+            💾 Update Energy Record
+        </button>
+
+
+    </form>
+
+</div>
+
+
+</div>
+
+</body>
+
+</html>

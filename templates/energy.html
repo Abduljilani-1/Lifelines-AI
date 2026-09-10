@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>LifeLens AI - Energy Tracker</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: white;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(40, 160, 200, 0.45),
+            transparent 35%
+        ),
+
+        linear-gradient(
+            135deg,
+            #061d4a 0%,
+            #06466b 45%,
+            #087b91 100%
+        );
+
+    padding-bottom: 40px;
+}
+
+
+/* HEADER */
+
+.header {
+
+    width: 92%;
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    padding: 25px 0;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.logo {
+
+    font-size: 30px;
+
+    font-weight: bold;
+}
+
+.logo span {
+
+    color: #32e7ff;
+}
+
+.header-right {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+.welcome {
+
+    font-weight: bold;
+
+    font-size: 16px;
+}
+
+.logout {
+
+    text-decoration: none;
+
+    color: white;
+
+    border: 1px solid #58dcff;
+
+    padding: 10px 22px;
+
+    border-radius: 25px;
+
+    font-weight: bold;
+}
+
+.logout:hover {
+
+    background: rgba(50,220,255,0.15);
+}
+
+
+/* MAIN */
+
+.container {
+
+    width: 92%;
+
+    max-width: 1200px;
+
+    margin: auto;
+}
+
+
+/* TITLE */
+
+.title {
+
+    background:
+        rgba(10, 112, 150, 0.55);
+
+    border:
+        1px solid
+        rgba(100, 220, 255, 0.6);
+
+    border-radius: 18px;
+
+    padding: 22px 28px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.title-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+.title-left h1 {
+
+    font-size: 32px;
+}
+
+.energy-emoji {
+
+    font-size: 42px;
+}
+
+.dashboard {
+
+    text-decoration: none;
+
+    background: #1769ed;
+
+    color: white;
+
+    padding: 11px 22px;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+}
+
+.dashboard:hover {
+
+    background: #0d55c8;
+}
+
+
+/* CARD */
+
+.card {
+
+    background:
+        rgba(8, 105, 142, 0.58);
+
+    border:
+        1px solid
+        rgba(100, 220, 255, 0.55);
+
+    border-radius: 18px;
+
+    padding: 25px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,0.15);
+}
+
+.card h2 {
+
+    margin-bottom: 20px;
+
+    font-size: 23px;
+}
+
+
+/* ERROR */
+
+.error {
+
+    background:
+        rgba(255, 60, 60, 0.25);
+
+    border:
+        1px solid #ff7777;
+
+    padding: 13px;
+
+    border-radius: 8px;
+
+    margin-bottom: 18px;
+
+    color: white;
+}
+
+
+/* FORM */
+
+.group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-bottom: 18px;
+}
+
+label {
+
+    font-weight: bold;
+
+    font-size: 15px;
+}
+
+select,
+textarea {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border-radius: 8px;
+
+    border:
+        1px solid
+        rgba(180,235,255,0.55);
+
+    background:
+        rgba(3,70,100,0.55);
+
+    color: white;
+
+    font-size: 15px;
+
+    outline: none;
+}
+
+select option {
+
+    background: #06466b;
+
+    color: white;
+}
+
+textarea {
+
+    min-height: 90px;
+
+    resize: vertical;
+}
+
+select:focus,
+textarea:focus {
+
+    border-color: #53ddff;
+}
+
+textarea::placeholder {
+
+    color: #b8dce8;
+}
+
+
+/* ENERGY LEVELS */
+
+.energy-options {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 12px;
+
+    margin-top: 8px;
+}
+
+.energy-option input {
+
+    display: none;
+}
+
+.energy-option label {
+
+    min-height: 110px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 12px;
+
+    border-radius: 16px;
+
+    cursor: pointer;
+
+    background:
+        rgba(3,70,100,0.55);
+
+    border:
+        1px solid
+        rgba(180,235,255,0.45);
+
+    transition: 0.3s;
+}
+
+.energy-option label:hover {
+
+    transform: translateY(-4px);
+
+    background:
+        rgba(0,120,160,0.55);
+}
+
+.energy-option input:checked + label {
+
+    transform: translateY(-4px);
+
+    background:
+        rgba(0,160,205,0.60);
+
+    border:
+        2px solid
+        rgba(190,250,255,0.95);
+
+    box-shadow:
+        0 5px 20px
+        rgba(50,220,255,0.25);
+}
+
+.energy-icon {
+
+    font-size: 34px;
+
+    margin-bottom: 7px;
+}
+
+
+/* SAVE */
+
+.save-btn {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #1769ed;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.save-btn:hover {
+
+    background: #0d55c8;
+}
+
+
+/* HISTORY */
+
+.history {
+
+    overflow-x: auto;
+}
+
+table {
+
+    width: 100%;
+
+    min-width: 750px;
+
+    border-collapse: collapse;
+}
+
+th {
+
+    text-align: left;
+
+    padding: 14px 10px;
+
+    border-bottom:
+        1px solid
+        rgba(190,240,255,0.5);
+
+    font-size: 14px;
+}
+
+td {
+
+    padding: 14px 10px;
+
+    border-bottom:
+        1px solid
+        rgba(190,240,255,0.2);
+
+    font-size: 14px;
+}
+
+tr:hover {
+
+    background:
+        rgba(255,255,255,0.05);
+}
+
+
+/* ENERGY BADGES */
+
+.energy-badge {
+
+    padding: 6px 10px;
+
+    border-radius: 6px;
+
+    font-weight: bold;
+
+    font-size: 13px;
+}
+
+.very-high {
+
+    background: #079b67;
+}
+
+.high {
+
+    background: #087e72;
+}
+
+.moderate {
+
+    background: #a07818;
+}
+
+.low {
+
+    background: #a5483b;
+}
+
+.very-low {
+
+    background: #7d2639;
+}
+
+
+/* ACTIONS */
+
+.edit {
+
+    background: #1769ed;
+
+    color: white;
+
+    text-decoration: none;
+
+    padding: 7px 12px;
+
+    border-radius: 5px;
+
+    margin-right: 5px;
+}
+
+.delete {
+
+    background: #e52c4b;
+
+    color: white;
+
+    text-decoration: none;
+
+    padding: 7px 12px;
+
+    border-radius: 5px;
+}
+
+.edit:hover {
+
+    background: #0d55c8;
+}
+
+.delete:hover {
+
+    background: #c91e3b;
+}
+
+
+/* EMPTY */
+
+.empty {
+
+    text-align: center;
+
+    padding: 30px;
+
+    color: #c8e7f0;
+}
+
+
+/* MOBILE */
+
+@media(max-width: 800px) {
+
+    .header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .header-right {
+
+        width: 100%;
+
+        justify-content: space-between;
+    }
+
+    .title {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 18px;
+    }
+
+    .energy-options {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div class="logo">
+
+        🧠 LifeLens <span>AI</span>
+
+    </div>
+
+
+    <div class="header-right">
+
+        <div class="welcome">
+
+            Good evening, {{ name }}! ⚡
+
+        </div>
+
+
+        <a
+            href="{{ url_for('logout') }}"
+            class="logout"
+        >
+            → Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- TITLE -->
+
+<div class="title">
+
+    <div class="title-left">
+
+        <div class="energy-emoji">
+            ⚡
+        </div>
+
+        <h1>
+            Energy Tracker
+        </h1>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="dashboard"
+    >
+        ← Dashboard
+    </a>
+
+</div>
+
+
+<!-- ADD ENERGY -->
+
+<div class="card">
+
+    <h2>
+        Add Energy Record
+    </h2>
+
+
+    {% if error %}
+
+    <div class="error">
+
+        {{ error }}
+
+    </div>
+
+    {% endif %}
+
+
+    <form
+        action="{{ url_for('energy') }}"
+        method="POST"
+    >
+
+
+        <!-- ENERGY LEVEL -->
+
+        <div class="group">
+
+            <label>
+                How is your energy level?
+            </label>
+
+
+            <div class="energy-options">
+
+
+                <!-- VERY HIGH -->
+
+                <div class="energy-option">
+
+                    <input
+                        type="radio"
+                        id="very_high"
+                        name="energy_level"
+                        value="Very High"
+                        required
+                    >
+
+                    <label for="very_high">
+
+                        <span class="energy-icon">
+                            🔥
+                        </span>
+
+                        Very High
+
+                    </label>
+
+                </div>
+
+
+                <!-- HIGH -->
+
+                <div class="energy-option">
+
+                    <input
+                        type="radio"
+                        id="high"
+                        name="energy_level"
+                        value="High"
+                    >
+
+                    <label for="high">
+
+                        <span class="energy-icon">
+                            ⚡
+                        </span>
+
+                        High
+
+                    </label>
+
+                </div>
+
+
+                <!-- MODERATE -->
+
+                <div class="energy-option">
+
+                    <input
+                        type="radio"
+                        id="moderate"
+                        name="energy_level"
+                        value="Moderate"
+                    >
+
+                    <label for="moderate">
+
+                        <span class="energy-icon">
+                            🙂 
+                        </span>
+
+                        Moderate
+
+                    </label>
+
+                </div>
+
+
+                <!-- LOW -->
+
+                <div class="energy-option">
+
+                    <input
+                        type="radio"
+                        id="low"
+                        name="energy_level"
+                        value="Low"
+                    >
+
+                    <label for="low">
+
+                        <span class="energy-icon">
+                            😴
+                        </span>
+
+                        Low
+
+                    </label>
+
+                </div>
+
+
+                <!-- VERY LOW -->
+
+                <div class="energy-option">
+
+                    <input
+                        type="radio"
+                        id="very_low"
+                        name="energy_level"
+                        value="Very Low"
+                    >
+
+                    <label for="very_low">
+
+                        <span class="energy-icon">
+                            🪫
+                        </span>
+
+                        Very Low
+
+                    </label>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- NOTE -->
+
+        <div class="group">
+
+            <label for="note">
+                Note
+            </label>
+
+            <textarea
+                id="note"
+                name="note"
+                placeholder="How are you feeling today?"
+            ></textarea>
+
+        </div>
+
+
+        <!-- SAVE -->
+
+        <button
+            type="submit"
+            class="save-btn"
+        >
+
+            💾 Save Energy Record
+
+        </button>
+
+
+    </form>
+
+</div>
+
+
+<!-- HISTORY -->
+
+<div class="card">
+
+    <h2>
+        Energy History
+    </h2>
+
+
+    {% if energy_records %}
+
+    <div class="history">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Date & Time
+                    </th>
+
+                    <th>
+                        Energy Level
+                    </th>
+
+                    <th>
+                        Note
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for record in energy_records %}
+
+                <tr>
+
+
+                    <td>
+
+                        {{ record.created_at.strftime('%d-%m-%Y %I:%M %p') }}
+
+                    </td>
+
+
+                    <td>
+
+                        {% if record.energy_level == "Very High" %}
+
+                            <span class="energy-badge very-high">
+                                Very High
+                            </span>
+
+                        {% elif record.energy_level == "High" %}
+
+                            <span class="energy-badge high">
+                                High
+                            </span>
+
+                        {% elif record.energy_level == "Moderate" %}
+
+                            <span class="energy-badge moderate">
+                                Moderate
+                            </span>
+
+                        {% elif record.energy_level == "Low" %}
+
+                            <span class="energy-badge low">
+                                Low
+                            </span>
+
+                        {% else %}
+
+                            <span class="energy-badge very-low">
+                                Very Low
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ record.note or "-" }}
+
+                    </td>
+
+
+                    <td>
+
+                        <a
+                            href="{{ url_for('edit_energy', id=record.id) }}"
+                            class="edit"
+                        >
+                            Edit
+                        </a>
+
+
+                        <a
+                            href="{{ url_for('delete_energy', id=record.id) }}"
+                            class="delete"
+
+                            onclick="return confirm('Delete this energy record?');"
+                        >
+                            Delete
+                        </a>
+
+                    </td>
+
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="empty">
+
+        ⚡ No energy records yet.
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+</div>
+
+</body>
+
+</html>

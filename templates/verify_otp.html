@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LifeLens AI - Verify OTP</title>
+
+
+    <style>
+
+        /* ==========================================
+           RESET
+        ========================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        /* ==========================================
+           OCEAN BACKGROUND
+        ========================================== */
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            color: white;
+
+            overflow: hidden;
+
+            background:
+
+                radial-gradient(
+                    ellipse at 50% -10%,
+                    rgba(80, 230, 255, 0.5),
+                    transparent 40%
+                ),
+
+                linear-gradient(
+                    180deg,
+                    #021a45 0%,
+                    #023d6b 30%,
+                    #00647d 65%,
+                    #012f48 100%
+                );
+        }
+
+
+        /* ==========================================
+           WATER LIGHT
+        ========================================== */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            top: -20%;
+
+            left: 5%;
+
+            width: 90%;
+
+            height: 120%;
+
+            background:
+
+                linear-gradient(
+                    110deg,
+                    transparent 20%,
+                    rgba(120, 245, 255, 0.17) 35%,
+                    transparent 48%
+                ),
+
+                linear-gradient(
+                    70deg,
+                    transparent 30%,
+                    rgba(100, 230, 255, 0.14) 45%,
+                    transparent 58%
+                );
+
+            filter: blur(8px);
+
+            pointer-events: none;
+
+            z-index: 0;
+
+            animation:
+                waterMove
+                10s
+                ease-in-out
+                infinite
+                alternate;
+        }
+
+
+        @keyframes waterMove {
+
+            from {
+                transform:
+                    translateX(-25px);
+            }
+
+            to {
+                transform:
+                    translateX(30px);
+            }
+        }
+
+
+        /* ==========================================
+           BUBBLES
+        ========================================== */
+
+        .bubble {
+
+            position: fixed;
+
+            bottom: -40px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid
+                rgba(220, 250, 255, 0.65);
+
+            background:
+                rgba(150, 235, 255, 0.08);
+
+            pointer-events: none;
+
+            z-index: 2;
+
+            animation:
+                bubbleRise
+                linear
+                infinite;
+        }
+
+
+        .b1 {
+            left: 7%;
+            width: 8px;
+            height: 8px;
+            animation-duration: 10s;
+        }
+
+
+        .b2 {
+            left: 17%;
+            width: 14px;
+            height: 14px;
+            animation-duration: 14s;
+            animation-delay: 2s;
+        }
+
+
+        .b3 {
+            left: 29%;
+            width: 6px;
+            height: 6px;
+            animation-duration: 9s;
+            animation-delay: 4s;
+        }
+
+
+        .b4 {
+            left: 43%;
+            width: 11px;
+            height: 11px;
+            animation-duration: 13s;
+            animation-delay: 1s;
+        }
+
+
+        .b5 {
+            left: 57%;
+            width: 17px;
+            height: 17px;
+            animation-duration: 16s;
+            animation-delay: 5s;
+        }
+
+
+        .b6 {
+            left: 72%;
+            width: 8px;
+            height: 8px;
+            animation-duration: 11s;
+            animation-delay: 3s;
+        }
+
+
+        .b7 {
+            left: 87%;
+            width: 13px;
+            height: 13px;
+            animation-duration: 15s;
+            animation-delay: 6s;
+        }
+
+
+        @keyframes bubbleRise {
+
+            0% {
+
+                transform:
+                    translateY(0)
+                    translateX(0);
+
+                opacity: 0;
+            }
+
+            15% {
+                opacity: 0.8;
+            }
+
+            50% {
+
+                transform:
+                    translateY(-50vh)
+                    translateX(25px);
+            }
+
+            100% {
+
+                transform:
+                    translateY(-115vh)
+                    translateX(-25px);
+
+                opacity: 0;
+            }
+        }
+
+
+        /* ==========================================
+           FISH
+        ========================================== */
+
+        .fish {
+
+            position: fixed;
+
+            right: -180px;
+
+            z-index: 3;
+
+            pointer-events: none;
+
+            line-height: 1;
+
+            animation:
+                swim
+                linear
+                infinite;
+        }
+
+
+        .fish span {
+
+            display: inline-block;
+
+            animation:
+                fishBody
+                0.7s
+                ease-in-out
+                infinite
+                alternate;
+        }
+
+
+        .fish1 {
+
+            top: 22%;
+
+            font-size: 54px;
+
+            animation-duration: 18s;
+        }
+
+
+        .fish2 {
+
+            top: 40%;
+
+            font-size: 40px;
+
+            animation-duration: 23s;
+
+            animation-delay: 4s;
+        }
+
+
+        .fish3 {
+
+            top: 61%;
+
+            font-size: 47px;
+
+            animation-duration: 20s;
+
+            animation-delay: 7s;
+        }
+
+
+        .fish4 {
+
+            top: 74%;
+
+            font-size: 34px;
+
+            animation-duration: 27s;
+
+            animation-delay: 10s;
+        }
+
+
+        /* ==========================================
+           FISH SWIMMING
+           RIGHT → LEFT
+========================================== */
+
+        @keyframes swim {
+
+            0% {
+
+                right: -180px;
+
+                transform:
+                    translateY(0);
+            }
+
+            20% {
+
+                transform:
+                    translateY(-10px);
+            }
+
+            40% {
+
+                transform:
+                    translateY(10px);
+            }
+
+            60% {
+
+                transform:
+                    translateY(-8px);
+            }
+
+            80% {
+
+                transform:
+                    translateY(7px);
+            }
+
+            100% {
+
+                right: 110%;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        /* ==========================================
+           FISH BODY MOVEMENT
+        ========================================== */
+
+        @keyframes fishBody {
+
+            0% {
+
+                transform:
+                    rotate(-3deg)
+                    scaleY(0.97);
+            }
+
+            50% {
+
+                transform:
+                    rotate(3deg)
+                    scaleY(1.03);
+            }
+
+            100% {
+
+                transform:
+                    rotate(-3deg)
+                    scaleY(0.97);
+            }
+        }
+
+
+        /* ==========================================
+           JELLYFISH
+        ========================================== */
+
+        .jellyfish {
+
+            position: fixed;
+
+            right: 7%;
+
+            top: 16%;
+
+            z-index: 3;
+
+            font-size: 68px;
+
+            opacity: 0.42;
+
+            pointer-events: none;
+
+            animation:
+                jellyMove
+                6s
+                ease-in-out
+                infinite;
+        }
+
+
+        .jellyfish.two {
+
+            right: 18%;
+
+            top: 65%;
+
+            font-size: 40px;
+
+            animation-delay: 2s;
+        }
+
+
+        @keyframes jellyMove {
+
+            0%,
+            100% {
+
+                transform:
+                    translateY(0)
+                    rotate(-2deg);
+            }
+
+            50% {
+
+                transform:
+                    translateY(-25px)
+                    rotate(3deg);
+            }
+        }
+
+
+        /* ==========================================
+           CORAL
+        ========================================== */
+
+        .coral {
+
+            position: fixed;
+
+            bottom: -10px;
+
+            z-index: 3;
+
+            pointer-events: none;
+
+            font-size: 75px;
+
+            opacity: 0.75;
+        }
+
+
+        .coral-left {
+            left: 0;
+        }
+
+
+        .coral-right {
+            right: 0;
+        }
+
+
+        /* ==========================================
+           OTP CONTAINER
+        ========================================== */
+
+        .container {
+
+            position: relative;
+
+            z-index: 10;
+
+            width: 420px;
+
+            padding: 42px;
+
+            text-align: center;
+
+            border-radius: 28px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(35, 190, 235, 0.22),
+                    rgba(0, 55, 110, 0.58)
+                );
+
+            backdrop-filter:
+                blur(16px);
+
+            -webkit-backdrop-filter:
+                blur(16px);
+
+            border:
+                1px solid
+                rgba(165, 245, 255, 0.7);
+
+            box-shadow:
+
+                0 20px 45px
+                rgba(0, 15, 40, 0.55);
+        }
+
+
+        /* ==========================================
+           LOGO
+        ========================================== */
+
+        .logo {
+
+            font-size: 32px;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+
+            text-shadow:
+                0 4px 12px
+                rgba(0, 0, 0, 0.4);
+        }
+
+
+        .logo span {
+
+            color:
+                #48eaff;
+        }
+
+
+        /* ==========================================
+           TITLE
+        ========================================== */
+
+        h2 {
+
+            font-size: 24px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .description {
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            opacity: 0.88;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* ==========================================
+           ERROR MESSAGE
+        ========================================== */
+
+        .error {
+
+            margin-bottom: 18px;
+
+            padding: 11px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255, 80, 80, 0.14);
+
+            border:
+                1px solid
+                rgba(255, 100, 100, 0.3);
+
+            font-size: 14px;
+        }
+
+
+        /* ==========================================
+           OTP INPUT
+        ========================================== */
+
+        .otp-input {
+
+            width: 100%;
+
+            padding: 16px;
+
+            text-align: center;
+
+            letter-spacing: 10px;
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+            border-radius: 14px;
+
+            border:
+                1px solid
+                rgba(180, 245, 255, 0.5);
+
+            outline: none;
+
+            color: white;
+
+            background:
+                rgba(0, 25, 55, 0.65);
+
+            margin-bottom: 22px;
+
+            transition:
+                0.3s;
+        }
+
+
+        .otp-input:focus {
+
+            border-color:
+                #48eaff;
+
+            box-shadow:
+                0 0 18px
+                rgba(72, 234, 255, 0.3);
+        }
+
+
+        .otp-input::placeholder {
+
+            color:
+                rgba(255, 255, 255, 0.35);
+
+            letter-spacing: 7px;
+        }
+
+
+        /* ==========================================
+           TIMER AREA
+        ========================================== */
+
+        .timer-area {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            margin:
+                5px auto 25px;
+        }
+
+
+        .timer {
+
+            position: relative;
+
+            width: 105px;
+
+            height: 105px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+        }
+
+
+        /* TIMER OUTER RING */
+
+        .timer-ring {
+
+            position: absolute;
+
+            inset: 0;
+
+            border-radius: 50%;
+
+            background:
+
+                conic-gradient(
+                    #48eaff var(--progress),
+                    rgba(255,255,255,0.12) var(--progress)
+                );
+
+            transform:
+                rotate(-90deg);
+
+            transition:
+                background 1s linear;
+
+            box-shadow:
+                0 0 18px
+                rgba(72,234,255,0.25);
+        }
+
+
+        /* TIMER INNER CIRCLE */
+
+        .timer-ring::after {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 7px;
+
+            border-radius: 50%;
+
+            background:
+                #034668;
+        }
+
+
+        /* TIMER NUMBER */
+
+        .timer-text {
+
+            position: relative;
+
+            z-index: 2;
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+            color:
+                white;
+
+            text-shadow:
+
+                0 0 10px
+                rgba(72,234,255,0.7);
+        }
+
+
+        /* TIMER LABEL */
+
+        .timer-label {
+
+            margin-top: -12px;
+
+            margin-bottom: 20px;
+
+            font-size: 13px;
+
+            opacity: 0.82;
+        }
+
+
+        /* ==========================================
+           VERIFY BUTTON
+        ========================================== */
+
+        button {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #16b9dc,
+                    #0874a8
+                );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition:
+                0.3s ease;
+
+            box-shadow:
+                0 8px 18px
+                rgba(0, 25, 55, 0.3);
+        }
+
+
+        button:hover {
+
+            transform:
+                translateY(-3px);
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #25d5ef,
+                    #0a8ac0
+                );
+
+            box-shadow:
+                0 12px 25px
+                rgba(0, 25, 55, 0.4);
+        }
+
+
+        /* ==========================================
+           RESEND OTP
+        ========================================== */
+
+        .resend {
+
+            margin-top: 20px;
+
+            font-size: 14px;
+        }
+
+
+        .resend a {
+
+            color:
+                #65eaff;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            opacity: 0.45;
+
+            pointer-events: none;
+
+            transition:
+                0.3s;
+        }
+
+
+        .resend a.active {
+
+            opacity: 1;
+
+            pointer-events: auto;
+        }
+
+
+        .resend a.active:hover {
+
+            text-decoration:
+                underline;
+        }
+
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media (max-width: 500px) {
+
+            .container {
+
+                width: 92%;
+
+                padding:
+                    32px 22px;
+            }
+
+            .fish,
+            .jellyfish,
+            .coral {
+
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================
+         BUBBLES
+    ========================================== -->
+
+    <div class="bubble b1"></div>
+    <div class="bubble b2"></div>
+    <div class="bubble b3"></div>
+    <div class="bubble b4"></div>
+    <div class="bubble b5"></div>
+    <div class="bubble b6"></div>
+    <div class="bubble b7"></div>
+
+
+    <!-- ==========================================
+         FISH
+    ========================================== -->
+
+    <div class="fish fish1">
+        <span>🐠</span>
+    </div>
+
+
+    <div class="fish fish2">
+        <span>🐟</span>
+    </div>
+
+
+    <div class="fish fish3">
+        <span>🐡</span>
+    </div>
+
+
+    <div class="fish fish4">
+        <span>🐠</span>
+    </div>
+
+
+    <!-- ==========================================
+         JELLYFISH
+    ========================================== -->
+
+    <div class="jellyfish">
+        🪼
+    </div>
+
+
+    <div class="jellyfish two">
+        🪼
+    </div>
+
+
+    <!-- ==========================================
+         CORAL
+    ========================================== -->
+
+    <div class="coral coral-left">
+        🪸🌿
+    </div>
+
+
+    <div class="coral coral-right">
+        🌿🪸
+    </div>
+
+
+    <!-- ==========================================
+         OTP CARD
+    ========================================== -->
+
+    <div class="container">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            🧠 LifeLens
+            <span>AI</span>
+
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h2>
+
+            🔐 Verify OTP
+
+        </h2>
+
+
+        <!-- DESCRIPTION -->
+
+        <p class="description">
+
+            We sent a 6-digit verification code
+            to your registered Gmail address.
+
+        </p>
+
+
+        <!-- ERROR -->
+
+        {% if error %}
+
+        <div class="error">
+
+            ⚠️ {{ error }}
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ======================================
+             OTP FORM
+        ======================================= -->
+
+        <form
+            method="POST"
+            id="otpForm"
+        >
+
+
+            <input
+                type="text"
+                name="otp"
+                id="otp"
+                class="otp-input"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                placeholder="••••••"
+                required
+            >
+
+
+            <!-- ==================================
+                 TIMER
+            ================================== -->
+
+            <div class="timer-area">
+
+                <div class="timer">
+
+                    <div
+                        class="timer-ring"
+                        id="timerRing"
+                    ></div>
+
+
+                    <div
+                        class="timer-text"
+                        id="timerText"
+                    >
+                        01:00
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="timer-label"
+                id="timerLabel"
+            >
+
+                OTP expires in 1 minute
+
+            </div>
+
+
+            <!-- VERIFY -->
+
+            <button
+                type="submit"
+            >
+
+                Verify OTP
+
+            </button>
+
+
+        </form>
+
+
+        <!-- ======================================
+             RESEND
+        ======================================= -->
+
+        <div class="resend">
+
+            Didn't receive the OTP?
+
+            <a
+                href="{{ url_for('resend_otp') }}"
+                id="resendLink"
+            >
+
+                Resend OTP
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ==========================================
+         TIMER JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+        const timerText =
+            document.getElementById("timerText");
+
+        const timerRing =
+            document.getElementById("timerRing");
+
+        const timerLabel =
+            document.getElementById("timerLabel");
+
+        const resendLink =
+            document.getElementById("resendLink");
+
+
+        let totalSeconds = 60;
+
+
+        function updateTimer() {
+
+            /* ==============================
+               MINUTES & SECONDS
+            ============================== */
+
+            let minutes =
+                Math.floor(
+                    totalSeconds / 60
+                );
+
+
+            let seconds =
+                totalSeconds % 60;
+
+
+            let formattedMinutes =
+                String(minutes).padStart(
+                    2,
+                    "0"
+                );
+
+
+            let formattedSeconds =
+                String(seconds).padStart(
+                    2,
+                    "0"
+                );
+
+
+            /* ==============================
+               DISPLAY TIMER
+            ============================== */
+
+            timerText.textContent =
+                formattedMinutes +
+                ":" +
+                formattedSeconds;
+
+
+            /* ==============================
+               CIRCLE PROGRESS
+            ============================== */
+
+            let percentage =
+                (totalSeconds / 60) * 360;
+
+
+            timerRing.style.setProperty(
+                "--progress",
+                percentage + "deg"
+            );
+
+
+            /* ==============================
+               LAST 10 SECONDS
+            ============================== */
+
+            if (totalSeconds <= 10) {
+
+                timerText.style.color =
+                    "#ffdddd";
+
+                timerLabel.textContent =
+                    "⚠️ OTP expires soon!";
+
+                timerRing.style.filter =
+                    "drop-shadow(0 0 10px rgba(255,80,80,0.6))";
+            }
+
+
+            /* ==============================
+               OTP EXPIRED
+            ============================== */
+
+            if (totalSeconds <= 0) {
+
+                clearInterval(timerInterval);
+
+
+                timerText.textContent =
+                    "00:00";
+
+
+                timerLabel.textContent =
+                    "⏰ OTP expired";
+
+
+                resendLink.classList.add(
+                    "active"
+                );
+
+
+                return;
+            }
+
+
+            totalSeconds--;
+
+        }
+
+
+        /* Start timer */
+
+        updateTimer();
+
+
+        const timerInterval =
+            setInterval(
+                updateTimer,
+                1000
+            );
+
+    </script>
+
+
+</body>
+
+</html>

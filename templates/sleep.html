@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LifeLens AI - Sleep Tracker</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            min-height: 100vh;
+
+            color: white;
+
+            background:
+                radial-gradient(
+                    circle at 50% 0%,
+                    rgba(40, 160, 200, 0.45),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #061d4a 0%,
+                    #06466b 45%,
+                    #087b91 100%
+                );
+
+            padding-bottom: 40px;
+        }
+
+
+        /* HEADER */
+
+        .header {
+
+            width: 92%;
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 25px 0;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .logo {
+
+            font-size: 30px;
+
+            font-weight: bold;
+        }
+
+
+        .logo span {
+
+            color: #32e7ff;
+        }
+
+
+        .header-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 20px;
+        }
+
+
+        .welcome {
+
+            font-weight: bold;
+
+            font-size: 16px;
+        }
+
+
+        .logout {
+
+            text-decoration: none;
+
+            color: white;
+
+            border: 1px solid #58dcff;
+
+            padding: 10px 22px;
+
+            border-radius: 25px;
+
+            font-weight: bold;
+        }
+
+
+        /* MAIN */
+
+        .container {
+
+            width: 92%;
+
+            max-width: 1200px;
+
+            margin: auto;
+        }
+
+
+        /* TITLE */
+
+        .title {
+
+            background: rgba(10, 112, 150, 0.55);
+
+            border: 1px solid rgba(100, 220, 255, 0.6);
+
+            border-radius: 18px;
+
+            padding: 22px 28px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+
+        .title-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        .title-left h1 {
+
+            font-size: 32px;
+        }
+
+
+        .sleep-emoji {
+
+            font-size: 42px;
+        }
+
+
+        .dashboard {
+
+            text-decoration: none;
+
+            background: #1769ed;
+
+            color: white;
+
+            padding: 11px 22px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+        }
+
+
+        /* CARD */
+
+        .card {
+
+            background: rgba(8, 105, 142, 0.58);
+
+            border: 1px solid rgba(100, 220, 255, 0.55);
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            margin-bottom: 20px;
+
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+
+        .card h2 {
+
+            margin-bottom: 20px;
+
+            font-size: 23px;
+        }
+
+
+        /* ERROR */
+
+        .error {
+
+            background: rgba(255, 60, 60, 0.25);
+
+            border: 1px solid #ff7777;
+
+            padding: 13px;
+
+            border-radius: 8px;
+
+            margin-bottom: 18px;
+
+            color: white;
+        }
+
+
+        /* FORM */
+
+        .row {
+
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+
+            margin-bottom: 18px;
+        }
+
+
+        label {
+
+            font-weight: bold;
+
+            font-size: 15px;
+        }
+
+
+        input,
+        select,
+        textarea {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border-radius: 8px;
+
+            border: 1px solid rgba(180,235,255,0.55);
+
+            background: rgba(3,70,100,0.55);
+
+            color: white;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+
+        select option {
+
+            background: #06466b;
+
+            color: white;
+        }
+
+
+        textarea {
+
+            min-height: 90px;
+
+            resize: vertical;
+        }
+
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+
+            border-color: #53ddff;
+        }
+
+
+        input::placeholder,
+        textarea::placeholder {
+
+            color: #b8dce8;
+        }
+
+
+        /* SAVE */
+
+        .save-btn {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            background: #1769ed;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .save-btn:hover {
+
+            background: #0d55c8;
+        }
+
+
+        /* HISTORY */
+
+        .history {
+
+            overflow-x: auto;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            min-width: 850px;
+
+            border-collapse: collapse;
+        }
+
+
+        th {
+
+            text-align: left;
+
+            padding: 14px 10px;
+
+            border-bottom: 1px solid rgba(190,240,255,0.5);
+
+            font-size: 14px;
+        }
+
+
+        td {
+
+            padding: 14px 10px;
+
+            border-bottom: 1px solid rgba(190,240,255,0.2);
+
+            font-size: 14px;
+        }
+
+
+        tr:hover {
+
+            background: rgba(255,255,255,0.05);
+        }
+
+
+        /* QUALITY */
+
+        .quality {
+
+            padding: 6px 10px;
+
+            border-radius: 6px;
+
+            font-weight: bold;
+
+            font-size: 13px;
+        }
+
+
+        .excellent {
+
+            background: #079b67;
+        }
+
+
+        .good {
+
+            background: #087e72;
+        }
+
+
+        .average {
+
+            background: #a07818;
+        }
+
+
+        .poor {
+
+            background: #a5483b;
+        }
+
+
+        .very-poor {
+
+            background: #7d2639;
+        }
+
+
+        /* ACTIONS */
+
+        .edit {
+
+            background: #1769ed;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 7px 12px;
+
+            border-radius: 5px;
+
+            margin-right: 5px;
+        }
+
+
+        .delete {
+
+            background: #e52c4b;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 7px 12px;
+
+            border-radius: 5px;
+        }
+
+
+        .empty {
+
+            text-align: center;
+
+            padding: 30px;
+
+            color: #c8e7f0;
+        }
+
+
+        /* MOBILE */
+
+        @media(max-width: 800px) {
+
+            .header {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .header-right {
+
+                width: 100%;
+
+                justify-content: space-between;
+            }
+
+            .title {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 18px;
+            }
+
+            .row {
+
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div class="logo">
+
+        🧠 LifeLens <span>AI</span>
+
+    </div>
+
+
+    <div class="header-right">
+
+        <div class="welcome">
+
+            Good evening, {{ name }}! ☀️
+
+        </div>
+
+
+        <a
+            href="{{ url_for('logout') }}"
+            class="logout"
+        >
+            → Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+
+    <!-- TITLE -->
+
+    <div class="title">
+
+        <div class="title-left">
+
+            <div class="sleep-emoji">
+                😴
+            </div>
+
+            <h1>
+                Sleep Tracker
+            </h1>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="dashboard"
+        >
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- ADD SLEEP -->
+
+    <div class="card">
+
+        <h2>
+            Add Sleep Record
+        </h2>
+
+
+        {% if error %}
+
+        <div class="error">
+
+            {{ error }}
+
+        </div>
+
+        {% endif %}
+
+
+        <form
+            action="{{ url_for('sleep') }}"
+            method="POST"
+        >
+
+
+            <div class="row">
+
+
+                <div class="group">
+
+                    <label>
+                        Sleep Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="sleep_date"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="group">
+
+                    <label>
+                        Bedtime
+                    </label>
+
+                    <input
+                        type="time"
+                        name="bedtime"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="group">
+
+                    <label>
+                        Wake-up Time
+                    </label>
+
+                    <input
+                        type="time"
+                        name="wake_time"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="group">
+
+                <label>
+                    Sleep Quality
+                </label>
+
+                <select
+                    name="sleep_quality"
+                    required
+                >
+
+                    <option value="">
+                        Select sleep quality
+                    </option>
+
+                    <option value="Excellent">
+                        Excellent
+                    </option>
+
+                    <option value="Good">
+                        Good
+                    </option>
+
+                    <option value="Average">
+                        Average
+                    </option>
+
+                    <option value="Poor">
+                        Poor
+                    </option>
+
+                    <option value="Very Poor">
+                        Very Poor
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="group">
+
+                <label>
+                    Note
+                </label>
+
+                <textarea
+                    name="note"
+                    placeholder="How was your sleep?"
+                ></textarea>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="save-btn"
+            >
+
+                💾 Save Sleep Record
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- HISTORY -->
+
+    <div class="card">
+
+        <h2>
+            Sleep History
+        </h2>
+
+
+        {% if sleep_records %}
+
+        <div class="history">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Bedtime</th>
+
+                        <th>Wake-up Time</th>
+
+                        <th>Quality</th>
+
+                        <th>Note</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for record in sleep_records %}
+
+                    <tr>
+
+
+                        <td>
+
+                            {{ record.sleep_date.strftime('%d-%m-%Y') }}
+
+                        </td>
+
+
+                        <td>
+
+                            {{ record.bedtime.strftime('%I:%M %p') }}
+
+                        </td>
+
+
+                        <td>
+
+                            {{ record.wake_time.strftime('%I:%M %p') }}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if record.sleep_quality == "Excellent" %}
+
+                                <span class="quality excellent">
+                                    Excellent
+                                </span>
+
+                            {% elif record.sleep_quality == "Good" %}
+
+                                <span class="quality good">
+                                    Good
+                                </span>
+
+                            {% elif record.sleep_quality == "Average" %}
+
+                                <span class="quality average">
+                                    Average
+                                </span>
+
+                            {% elif record.sleep_quality == "Poor" %}
+
+                                <span class="quality poor">
+                                    Poor
+                                </span>
+
+                            {% else %}
+
+                                <span class="quality very-poor">
+                                    Very Poor
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {{ record.note or "-" }}
+
+                        </td>
+
+
+                        <td>
+
+                            <a
+                                href="{{ url_for('edit_sleep', id=record.id) }}"
+                                class="edit"
+                            >
+                                Edit
+                            </a>
+
+
+                            <a
+                                href="{{ url_for('delete_sleep', id=record.id) }}"
+                                class="delete"
+                                onclick="return confirm('Delete this sleep record?');"
+                            >
+                                Delete
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+
+            😴 No sleep records yet.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

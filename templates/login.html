@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LifeLens AI - Login</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            color: white;
+
+            background:
+                radial-gradient(
+                    ellipse at 50% -10%,
+                    rgba(80, 230, 255, 0.5),
+                    transparent 40%
+                ),
+                linear-gradient(
+                    180deg,
+                    #021a45 0%,
+                    #023d6b 30%,
+                    #00647d 65%,
+                    #012f48 100%
+                );
+
+            overflow: hidden;
+        }
+
+
+        /* Ocean light */
+
+        body::before {
+            content: "";
+
+            position: fixed;
+
+            top: -20%;
+            left: 5%;
+
+            width: 90%;
+            height: 120%;
+
+            background:
+                linear-gradient(
+                    110deg,
+                    transparent 20%,
+                    rgba(120,245,255,0.17) 35%,
+                    transparent 48%
+                ),
+                linear-gradient(
+                    70deg,
+                    transparent 30%,
+                    rgba(100,230,255,0.14) 45%,
+                    transparent 58%
+                );
+
+            filter: blur(8px);
+
+            pointer-events: none;
+        }
+
+
+        /* Login card */
+
+        .container {
+            position: relative;
+
+            z-index: 2;
+
+            width: 400px;
+
+            padding: 40px;
+
+            border-radius: 24px;
+
+            background:
+                rgba(0, 45, 80, 0.55);
+
+            backdrop-filter: blur(15px);
+
+            border:
+                1px solid
+                rgba(165,245,255,0.65);
+
+            box-shadow:
+                0 20px 45px
+                rgba(0,15,40,0.5);
+        }
+
+
+        h1 {
+            text-align: center;
+
+            margin-bottom: 8px;
+
+            font-size: 32px;
+        }
+
+
+        h1 span {
+            color: #48eaff;
+        }
+
+
+        .subtitle {
+            text-align: center;
+
+            margin-bottom: 28px;
+
+            opacity: 0.9;
+        }
+
+
+        label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-weight: bold;
+        }
+
+
+        input {
+            width: 100%;
+
+            padding: 13px 15px;
+
+            margin-bottom: 18px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid
+                rgba(180,240,255,0.4);
+
+            outline: none;
+
+            background:
+                rgba(0,25,55,0.55);
+
+            color: white;
+
+            font-size: 15px;
+        }
+
+
+        input:focus {
+            border-color: #48eaff;
+
+            box-shadow:
+                0 0 10px
+                rgba(72,234,255,0.25);
+        }
+
+
+        input::placeholder {
+            color:
+                rgba(255,255,255,0.6);
+        }
+
+
+        button {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #16b9dc,
+                    #0874a8
+                );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+
+        button:hover {
+            transform: translateY(-2px);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #25d5ef,
+                    #0a8ac0
+                );
+        }
+
+
+        .message {
+            margin-bottom: 15px;
+
+            text-align: center;
+
+            padding: 10px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,0.08);
+        }
+
+
+        .links {
+            text-align: center;
+
+            margin-top: 22px;
+
+            line-height: 2;
+        }
+
+
+        a {
+            color: #65eaff;
+
+            text-decoration: none;
+        }
+
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <div class="container">
+
+        <h1>
+            🧠 LifeLens <span>AI</span>
+        </h1>
+
+        <p class="subtitle">
+            Welcome back to your life companion
+        </p>
+
+
+        {% if error %}
+            <div class="message">
+                ⚠️ {{ error }}
+            </div>
+        {% endif %}
+
+
+        {% if success %}
+            <div class="message">
+                ✅ {{ success }}
+            </div>
+        {% endif %}
+
+
+        <form method="POST">
+
+            <label>Email</label>
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
+
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+
+
+            <button type="submit">
+                Login
+            </button>
+
+        </form>
+
+
+        <div class="links">
+
+            <a href="{{ url_for('forgot_password') }}">
+                Forgot Password?
+            </a>
+
+            <br>
+
+            Don't have an account?
+            <a href="{{ url_for('register') }}">
+                Register
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

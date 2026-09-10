@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Edit Stress - LifeLens AI</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: white;
+
+            padding: 30px;
+
+            background:
+
+                radial-gradient(
+                    ellipse at 50% -10%,
+                    rgba(80, 230, 255, 0.5),
+                    transparent 40%
+                ),
+
+                linear-gradient(
+                    180deg,
+                    #021a45 0%,
+                    #023d6b 30%,
+                    #00647d 65%,
+                    #012f48 100%
+                );
+        }
+
+        .container {
+
+            width: 90%;
+
+            max-width: 700px;
+
+            margin: 60px auto;
+        }
+
+        .box {
+
+            padding: 35px;
+
+            border-radius: 22px;
+
+            background:
+                rgba(0,55,100,0.48);
+
+            border:
+                1px solid
+                rgba(170,245,255,0.65);
+
+            backdrop-filter: blur(12px);
+
+            box-shadow:
+                0 20px 45px
+                rgba(0,15,45,0.45);
+        }
+
+        h1 {
+
+            text-align: center;
+
+            margin-bottom: 25px;
+        }
+
+        label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+        }
+
+        select,
+        textarea {
+
+            width: 100%;
+
+            border: none;
+
+            outline: none;
+
+            border-radius: 12px;
+
+            padding: 14px;
+
+            font-size: 16px;
+
+            margin-bottom: 20px;
+        }
+
+        select {
+
+            background: white;
+
+            color: #123;
+        }
+
+        textarea {
+
+            min-height: 140px;
+
+            resize: vertical;
+
+            background: white;
+
+            color: #123;
+        }
+
+        .buttons {
+
+            display: flex;
+
+            gap: 12px;
+
+            justify-content: center;
+        }
+
+        button,
+        .cancel {
+
+            border: none;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            color: white;
+
+            padding: 12px 24px;
+
+            border-radius: 25px;
+
+            font-size: 15px;
+        }
+
+        button {
+
+            background:
+                rgba(0,155,205,0.9);
+        }
+
+        .cancel {
+
+            background:
+                rgba(100,100,100,0.7);
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="box">
+
+        <h1>
+            ✏️ Edit Stress
+        </h1>
+
+        {% if error %}
+
+            <p style="
+                color:#ffdddd;
+                text-align:center;
+                margin-bottom:20px;
+            ">
+                {{ error }}
+            </p>
+
+        {% endif %}
+
+
+        <form
+            method="POST"
+            action="{{ url_for('edit_stress', id=stress.id) }}"
+        >
+
+            <label>
+                Stress Level
+            </label>
+
+            <select
+                name="stress_level"
+                required
+            >
+
+                <option
+                    value="Low"
+                    {% if stress.stress_level == "Low" %}selected{% endif %}
+                >
+                    😌 Low
+                </option>
+
+                <option
+                    value="Moderate"
+                    {% if stress.stress_level == "Moderate" %}selected{% endif %}
+                >
+                    😐 Moderate
+                </option>
+
+                <option
+                    value="High"
+                    {% if stress.stress_level == "High" %}selected{% endif %}
+                >
+                    😟 High
+                </option>
+
+                <option
+                    value="Very High"
+                    {% if stress.stress_level == "Very High" %}selected{% endif %}
+                >
+                    😣 Very High
+                </option>
+
+            </select>
+
+
+            <label>
+                Note
+            </label>
+
+            <textarea
+                name="note"
+                placeholder="Write your note..."
+            >{{ stress.note or "" }}</textarea>
+
+
+            <div class="buttons">
+
+                <button type="submit">
+                    💾 Update Stress
+                </button>
+
+                <a
+                    href="{{ url_for('stress') }}"
+                    class="cancel"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LifeLens AI - Progress</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #06283D, #1363DF);
+            min-height: 100vh;
+            padding: 30px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        /* HEADER */
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .header h1 {
+            color: #5b4bc4;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #5b4bc4;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .back-btn:hover {
+            background: #4637a5;
+        }
+
+        /* CARD */
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            color: #5b4bc4;
+            margin-bottom: 20px;
+        }
+
+        /* LATEST CHECK-IN */
+        .progress-item {
+            margin-bottom: 20px;
+        }
+
+        .progress-title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        /* SUMMARY */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .stat {
+            background: #f7f7ff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat h3 {
+            font-size: 25px;
+            color: #5b4bc4;
+            margin-bottom: 8px;
+        }
+
+        .stat p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* HISTORY TABLE */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .history-table th {
+            background: #f3f1ff;
+            color: #5b4bc4;
+        }
+
+        .history-table tr:hover {
+            background: #fafafa;
+        }
+
+        /* EMPTY */
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+            font-size: 18px;
+        }
+
+        /* MESSAGE */
+        .message {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* MOBILE */
+        @media (max-width: 900px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 15px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .history-table {
+                font-size: 13px;
+            }
+
+            .history-table th,
+            .history-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+
+        <h1>📈 My Progress</h1>
+
+        <p>
+            Track your overall mood, stress, energy and sleep.
+        </p>
+
+        <a href="{{ url_for('dashboard') }}" class="back-btn">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- ERROR MESSAGE -->
+    {% if error %}
+
+    <div class="message">
+        {{ error }}
+    </div>
+
+    {% endif %}
+
+
+    {% if checkins and checkins|length > 0 %}
+
+        <!-- ============================================= -->
+        <!-- LATEST CHECK-IN -->
+        <!-- ============================================= -->
+
+        {% set latest = checkins[-1] %}
+
+        <div class="card">
+
+            <h2>📝 Latest Check-in</h2>
+
+            <div class="progress-item">
+
+                <div class="progress-title">
+                    <span>😊 Mood</span>
+                    <span>{{ latest['mood'] }}</span>
+                </div>
+
+            </div>
+
+
+            <div class="progress-item">
+
+                <div class="progress-title">
+                    <span>🧠 Stress</span>
+                    <span>{{ latest['stress_level'] }}</span>
+                </div>
+
+            </div>
+
+
+            <div class="progress-item">
+
+                <div class="progress-title">
+                    <span>⚡ Energy</span>
+                    <span>{{ latest['energy_level'] }}</span>
+                </div>
+
+            </div>
+
+
+            <div class="progress-item">
+
+                <div class="progress-title">
+                    <span>😴 Sleep</span>
+                    <span>{{ latest['sleep_hours'] }} hours</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ============================================= -->
+        <!-- OVERALL PROGRESS -->
+        <!-- ============================================= -->
+
+        <div class="card">
+
+            <h2>📊 Overall Progress</h2>
+
+            <div class="stats">
+
+                <!-- TOTAL CHECK-INS -->
+                <div class="stat">
+
+                    <h3>
+                        {{ checkins|length }}
+                    </h3>
+
+                    <p>
+                        Total Check-ins
+                    </p>
+
+                </div>
+
+
+                <!-- AVERAGE MOOD -->
+                <div class="stat">
+
+                    <h3>
+                        {{ avg_mood }}/5
+                    </h3>
+
+                    <p>
+                        Average Mood
+                    </p>
+
+                </div>
+
+
+                <!-- AVERAGE STRESS -->
+                <div class="stat">
+
+                    <h3>
+                        {{ avg_stress }}/4
+                    </h3>
+
+                    <p>
+                        Average Stress
+                    </p>
+
+                </div>
+
+
+                <!-- AVERAGE ENERGY -->
+                <div class="stat">
+
+                    <h3>
+                        {{ avg_energy }}/5
+                    </h3>
+
+                    <p>
+                        Average Energy
+                    </p>
+
+                </div>
+
+
+                <!-- AVERAGE SLEEP -->
+                <div class="stat">
+
+                    <h3>
+                        {{ avg_sleep }} hrs
+                    </h3>
+
+                    <p>
+                        Average Sleep
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ============================================= -->
+        <!-- CHECK-IN HISTORY -->
+        <!-- ============================================= -->
+
+        <div class="card">
+
+            <h2>📅 Check-in History</h2>
+
+            <div style="overflow-x: auto;">
+
+                <table class="history-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Date</th>
+
+                            <th>Mood</th>
+
+                            <th>Stress</th>
+
+                            <th>Energy</th>
+
+                            <th>Sleep</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for checkin in checkins %}
+
+                        <tr>
+
+                            <td>
+                                {{ checkin['checkin_date'] }}
+                            </td>
+
+                            <td>
+                                {{ checkin['mood'] }}
+                            </td>
+
+                            <td>
+                                {{ checkin['stress_level'] }}
+                            </td>
+
+                            <td>
+                                {{ checkin['energy_level'] }}
+                            </td>
+
+                            <td>
+                                {{ checkin['sleep_hours'] }} hrs
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    {% else %}
+
+        <!-- ============================================= -->
+        <!-- NO DATA -->
+        <!-- ============================================= -->
+
+        <div class="card">
+
+            <div class="empty">
+
+                <h2>📊 No Progress Yet</h2>
+
+                <p style="margin-top: 10px;">
+                    Complete your first Daily Check-in to see your progress here.
+                </p>
+
+                <a
+                    href="{{ url_for('daily_checkin') }}"
+                    class="back-btn"
+                >
+                    ➕ Add Daily Check-in
+                </a>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LifeLens AI - AI Insights</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #06283D, #1363DF);
+            min-height: 100vh;
+            padding: 30px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            color: #5b4bc4;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            color: #5b4bc4;
+            margin-bottom: 20px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .data-box {
+            background: #f7f7ff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .data-box h3 {
+            color: #5b4bc4;
+            margin-bottom: 8px;
+        }
+
+        .data-box p {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .insight {
+            background: #f7f7ff;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 22px;
+            background: #5b4bc4;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .back-btn:hover {
+            background: #4637a5;
+        }
+
+        .message {
+            text-align: center;
+            color: #666;
+            padding: 30px;
+        }
+
+        @media (max-width: 700px) {
+            .data-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 450px) {
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>🤖 AI Insights</h1>
+        <p>
+            Personalized insights based on your daily wellbeing.
+        </p>
+
+        <a href="{{ url_for('dashboard') }}" class="back-btn">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    {% if message %}
+
+        <div class="card">
+            <div class="message">
+                <h2>📊 No Data Available</h2>
+                <p>{{ message }}</p>
+
+                <a href="{{ url_for('daily_checkin') }}" class="back-btn">
+                    ➕ Daily Check-in
+                </a>
+            </div>
+        </div>
+
+    {% else %}
+
+        <div class="card">
+
+            <h2>📋 Your Latest Wellbeing</h2>
+
+            <div class="data-grid">
+
+                <div class="data-box">
+                    <h3>😊 Mood</h3>
+                    <p>{{ mood }}</p>
+                </div>
+
+                <div class="data-box">
+                    <h3>🧠 Stress</h3>
+                    <p>{{ stress }}</p>
+                </div>
+
+                <div class="data-box">
+                    <h3>⚡ Energy</h3>
+                    <p>{{ energy }}</p>
+                </div>
+
+                <div class="data-box">
+                    <h3>😴 Sleep</h3>
+                    <p>{{ sleep }} hrs</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>💡 Personalized AI Insights</h2>
+
+            {% for insight in insights %}
+
+                <div class="insight">
+                    {{ insight }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

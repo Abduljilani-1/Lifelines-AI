@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Daily Check-in | LifeLens AI</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #005f7f,
+                    #007c9e,
+                    #006b8f,
+                    #004d6b
+                );
+
+            color: white;
+
+            padding: 30px;
+        }
+
+
+        .container {
+
+            max-width: 850px;
+
+            margin: 50px auto;
+        }
+
+
+        .card {
+
+            background:
+                rgba(0, 65, 95, 0.65);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.30);
+
+            border-radius: 22px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,0.25);
+
+            backdrop-filter: blur(10px);
+        }
+
+
+        h1 {
+
+            text-align: center;
+
+            margin-bottom: 10px;
+
+            font-size: 32px;
+        }
+
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #d7f7ff;
+
+            margin-bottom: 30px;
+        }
+
+
+        .error {
+
+            background:
+                rgba(255,60,60,0.18);
+
+            border:
+                1px solid
+                rgba(255,120,120,0.55);
+
+            color: #ffd6d6;
+
+            padding: 13px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+        }
+
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .full {
+
+            grid-column: span 2;
+        }
+
+
+        label {
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+
+            color: #e5faff;
+        }
+
+
+        input,
+        select,
+        textarea {
+
+            width: 100%;
+
+            padding: 13px 15px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.35);
+
+            background:
+                rgba(255,255,255,0.10);
+
+            color: white;
+
+            outline: none;
+
+            font-size: 15px;
+        }
+
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+
+            border-color: #8eeaff;
+
+            box-shadow:
+                0 0 8px
+                rgba(142,234,255,0.35);
+        }
+
+
+        select option {
+
+            background: white;
+
+            color: #004d6b;
+        }
+
+
+        textarea {
+
+            min-height: 120px;
+
+            resize: vertical;
+        }
+
+
+        .buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            margin-top: 30px;
+        }
+
+
+        button,
+        a {
+
+            text-decoration: none;
+
+            padding: 13px 25px;
+
+            border-radius: 25px;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .save-btn {
+
+            border: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #43d9ff,
+                    #008fc0
+                );
+
+            color: white;
+        }
+
+
+        .cancel-btn {
+
+            color: white;
+
+            background:
+                rgba(255,255,255,0.12);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.35);
+        }
+
+
+        .save-btn:hover,
+        .cancel-btn:hover {
+
+            transform: translateY(-2px);
+        }
+
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: span 1;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+    <div class="card">
+
+
+        <h1>
+            ✏️ Edit Daily Check-in
+        </h1>
+
+
+        <p class="subtitle">
+            Update your daily well-being information.
+        </p>
+
+
+        {% if error %}
+
+            <div class="error">
+                ⚠️ {{ error }}
+            </div>
+
+        {% endif %}
+
+
+        <!-- IMPORTANT:
+             checkin is a dictionary,
+             so use checkin['id']
+        -->
+
+        <form
+            method="POST"
+            action="{{ url_for('edit_daily_checkin', id=checkin['id']) }}"
+        >
+
+
+            <div class="form-grid">
+
+
+                <!-- DATE -->
+
+                <div class="form-group">
+
+                    <label for="checkin_date">
+                        📅 Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="checkin_date"
+                        name="checkin_date"
+                        value="{{ checkin['checkin_date'] }}"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- MOOD -->
+
+                <div class="form-group">
+
+                    <label for="mood">
+                        😊 Mood
+                    </label>
+
+                    <select
+                        id="mood"
+                        name="mood"
+                        required
+                    >
+
+                        <option value="">
+                            Select your mood
+                        </option>
+
+                        <option value="Happy"
+                            {% if checkin['mood'] == 'Happy' %}
+                                selected
+                            {% endif %}>
+                            Happy
+                        </option>
+
+                        <option value="Good"
+                            {% if checkin['mood'] == 'Good' %}
+                                selected
+                            {% endif %}>
+                            Good
+                        </option>
+
+                        <option value="Neutral"
+                            {% if checkin['mood'] == 'Neutral' %}
+                                selected
+                            {% endif %}>
+                            Neutral
+                        </option>
+
+                        <option value="Sad"
+                            {% if checkin['mood'] == 'Sad' %}
+                                selected
+                            {% endif %}>
+                            Sad
+                        </option>
+
+                        <option value="Stressed"
+                            {% if checkin['mood'] == 'Stressed' %}
+                                selected
+                            {% endif %}>
+                            Stressed
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- STRESS -->
+
+                <div class="form-group">
+
+                    <label for="stress_level">
+                        😰 Stress Level
+                    </label>
+
+                    <select
+                        id="stress_level"
+                        name="stress_level"
+                        required
+                    >
+
+                        <option value="">
+                            Select stress level
+                        </option>
+
+                        <option value="Low"
+                            {% if checkin['stress_level'] == 'Low' %}
+                                selected
+                            {% endif %}>
+                            Low
+                        </option>
+
+                        <option value="Moderate"
+                            {% if checkin['stress_level'] == 'Moderate' %}
+                                selected
+                            {% endif %}>
+                            Moderate
+                        </option>
+
+                        <option value="High"
+                            {% if checkin['stress_level'] == 'High' %}
+                                selected
+                            {% endif %}>
+                            High
+                        </option>
+
+                        <option value="Very High"
+                            {% if checkin['stress_level'] == 'Very High' %}
+                                selected
+                            {% endif %}>
+                            Very High
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- ENERGY -->
+
+                <div class="form-group">
+
+                    <label for="energy_level">
+                        ⚡ Energy Level
+                    </label>
+
+                    <select
+                        id="energy_level"
+                        name="energy_level"
+                        required
+                    >
+
+                        <option value="">
+                            Select energy level
+                        </option>
+
+                        <option value="Very High"
+                            {% if checkin['energy_level'] == 'Very High' %}
+                                selected
+                            {% endif %}>
+                            Very High
+                        </option>
+
+                        <option value="High"
+                            {% if checkin['energy_level'] == 'High' %}
+                                selected
+                            {% endif %}>
+                            High
+                        </option>
+
+                        <option value="Moderate"
+                            {% if checkin['energy_level'] == 'Moderate' %}
+                                selected
+                            {% endif %}>
+                            Moderate
+                        </option>
+
+                        <option value="Low"
+                            {% if checkin['energy_level'] == 'Low' %}
+                                selected
+                            {% endif %}>
+                            Low
+                        </option>
+
+                        <option value="Very Low"
+                            {% if checkin['energy_level'] == 'Very Low' %}
+                                selected
+                            {% endif %}>
+                            Very Low
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- SLEEP -->
+
+                <div class="form-group">
+
+                    <label for="sleep_hours">
+                        😴 Sleep Hours
+                    </label>
+
+                    <input
+                        type="number"
+                        id="sleep_hours"
+                        name="sleep_hours"
+                        min="0"
+                        max="24"
+                        step="0.1"
+                        value="{{ checkin['sleep_hours'] }}"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- NOTE -->
+
+                <div class="form-group full">
+
+                    <label for="note">
+                        📝 Notes
+                    </label>
+
+                    <textarea
+                        id="note"
+                        name="note"
+                        placeholder="Write something about your day..."
+                    >{{ checkin['note'] or '' }}</textarea>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- BUTTONS -->
+
+            <div class="buttons">
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    💾 Update Check-in
+                </button>
+
+
+                <a
+                    href="{{ url_for('daily_checkin') }}"
+                    class="cancel-btn"
+                >
+                    ← Cancel
+                </a>
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

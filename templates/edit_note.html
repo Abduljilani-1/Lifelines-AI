@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>LifeLens AI - Edit Note</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: white;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 25px;
+
+            background:
+
+                radial-gradient(
+                    ellipse at 50% -10%,
+                    rgba(80, 230, 255, 0.5),
+                    transparent 40%
+                ),
+
+                linear-gradient(
+                    180deg,
+                    #021a45 0%,
+                    #023d6b 30%,
+                    #00647d 65%,
+                    #012f48 100%
+                );
+        }
+
+
+        /* ===============================
+           EDIT BOX
+        =============================== */
+
+        .edit-box {
+
+            width: 100%;
+
+            max-width: 650px;
+
+            padding: 35px;
+
+            border-radius: 22px;
+
+            background:
+                rgba(0, 55, 100, 0.48);
+
+            border:
+                1px solid
+                rgba(170, 245, 255, 0.65);
+
+            backdrop-filter:
+                blur(12px);
+
+            -webkit-backdrop-filter:
+                blur(12px);
+
+            box-shadow:
+
+                0 20px 45px
+                rgba(0, 15, 45, 0.45);
+        }
+
+
+        /* ===============================
+           TITLE
+        =============================== */
+
+        h1 {
+
+            text-align: center;
+
+            font-size: 32px;
+
+            margin-bottom: 28px;
+
+            text-shadow:
+                0 4px 10px
+                rgba(0, 0, 0, 0.4);
+        }
+
+
+        /* ===============================
+           ERROR
+        =============================== */
+
+        .error {
+
+            padding: 13px;
+
+            margin-bottom: 18px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(200, 50, 60, 0.6);
+
+            border:
+                1px solid
+                rgba(255, 170, 170, 0.5);
+
+            text-align: center;
+        }
+
+
+        /* ===============================
+           INPUTS
+        =============================== */
+
+        label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+
+            font-size: 15px;
+        }
+
+
+        input,
+        textarea {
+
+            width: 100%;
+
+            border: none;
+
+            outline: none;
+
+            border-radius: 12px;
+
+            padding: 14px;
+
+            margin-bottom: 20px;
+
+            font-size: 16px;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                rgba(255, 255, 255, 0.96);
+
+            color: #123;
+        }
+
+
+        input {
+
+            height: 50px;
+        }
+
+
+        textarea {
+
+            min-height: 210px;
+
+            resize: vertical;
+
+            line-height: 1.6;
+        }
+
+
+        /* ===============================
+           BUTTONS
+        =============================== */
+
+        .buttons {
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 5px;
+        }
+
+
+        .save-btn,
+        .cancel-btn {
+
+            flex: 1;
+
+            padding:
+                13px 20px;
+
+            border-radius: 25px;
+
+            text-align: center;
+
+            font-size: 16px;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            transition:
+                0.3s ease;
+        }
+
+
+        .save-btn {
+
+            border: none;
+
+            color: white;
+
+            background:
+                rgba(0, 155, 205, 0.85);
+        }
+
+
+        .cancel-btn {
+
+            color: white;
+
+            background:
+                rgba(70, 90, 110, 0.7);
+
+            border:
+                1px solid
+                rgba(190, 235, 245, 0.4);
+        }
+
+
+        .save-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            background:
+                rgba(0, 195, 230, 0.95);
+        }
+
+
+        .cancel-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            background:
+                rgba(90, 110, 130, 0.85);
+        }
+
+
+        /* ===============================
+           MOBILE
+        =============================== */
+
+        @media (max-width: 600px) {
+
+            body {
+
+                padding: 15px;
+            }
+
+
+            .edit-box {
+
+                padding: 25px 18px;
+            }
+
+
+            h1 {
+
+                font-size: 27px;
+            }
+
+
+            .buttons {
+
+                flex-direction: column;
+            }
+
+
+            .save-btn,
+            .cancel-btn {
+
+                width: 100%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="edit-box">
+
+
+    <!-- ===============================
+         TITLE
+    =============================== -->
+
+    <h1>
+        ✏️ Edit Note
+    </h1>
+
+
+    <!-- ===============================
+         ERROR MESSAGE
+    =============================== -->
+
+    {% if error %}
+
+        <div class="error">
+
+            ⚠️ {{ error }}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- ===============================
+         EDIT FORM
+    =============================== -->
+
+    <form
+        method="POST"
+        action="{{ url_for('edit_note', id=note.id) }}"
+    >
+
+
+        <label>
+            Note Title
+        </label>
+
+
+        <input
+            type="text"
+            name="title"
+            value="{{ note.title }}"
+            maxlength="150"
+            required
+        >
+
+
+        <label>
+            Note Content
+        </label>
+
+
+        <textarea
+            name="content"
+            required
+        >{{ note.content }}</textarea>
+
+
+        <!-- ===============================
+             BUTTONS
+        =============================== -->
+
+        <div class="buttons">
+
+
+            <button
+                type="submit"
+                class="save-btn"
+            >
+                💾 Save Changes
+            </button>
+
+
+            <a
+                href="{{ url_for('notes') }}"
+                class="cancel-btn"
+            >
+                ← Cancel
+            </a>
+
+
+        </div>
+
+
+    </form>
+
+
+</div>
+
+
+</body>
+
+</html>
